@@ -936,15 +936,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 464492121}
-  - component: {fileID: 464492120}
-  - component: {fileID: 464492119}
-  - component: {fileID: 464492118}
   - component: {fileID: 464492117}
   - component: {fileID: 464492116}
   - component: {fileID: 464492122}
   - component: {fileID: 464492123}
+  - component: {fileID: 464492125}
+  - component: {fileID: 464492124}
   m_Layer: 0
-  m_Name: PlayerComponent
+  m_Name: PlayerComponentCC
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -979,93 +978,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d37d6808d7407d84d8b9a63158353f25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &464492118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 464492115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd04ee19020ed7a4ca4af3da95608758, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  orientation: {fileID: 1085991089}
-  playerCam: {fileID: 988973672}
-  dashForce: 20
-  dashUpwardForce: 0
-  dashDuration: 0.25
-  DashCount: 3
-  RechargeSeconds: 1
-  Recharging: 0
-  dashKey: 304
-  dashText: {fileID: 672262402}
---- !u!114 &464492119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 464492115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37fbf8db8310c5d4ab2a5149fed6831b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  orientation: {fileID: 1085991089}
-  walkSpeed: 7
-  dashSpeed: 20
-  airSpeed: 5
-  GroundDrag: 2
-  dashing: 0
-  Height: 2
-  Ground:
-    serializedVersion: 2
-    m_Bits: 64
-  maxSlopeAngle: 40
-  playerWeight: 2
-  jumpForce: 10
-  jumpCooldown: 0.25
-  airMultiplier: 0
-  jumpKey: 32
-  DashKey: 304
-  VelocityText: {fileID: 1252418269}
-  PlayerStateText: {fileID: 1230032577}
-  PlayerFOVText: {fileID: 878712786}
-  PlayerHealthText: {fileID: 451876698}
-  playerCamera: {fileID: 988973676}
-  baseFOV: 0
-  maxFOV: 0
-  fovLerpSpeed: 0
-  state: 0
---- !u!54 &464492120
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 464492115}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 1
-  m_Constraints: 0
-  m_CollisionDetection: 1
 --- !u!4 &464492121
 Transform:
   m_ObjectHideFlags: 0
@@ -1114,6 +1026,57 @@ MonoBehaviour:
   Source: {fileID: 988973672}
   Range: 5
   InteractKey: 101
+--- !u!143 &464492124
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464492115}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &464492125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464492115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 870466952a4a4944993567d040b07637, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkSpeed: 7
+  sprintSpeed: 12
+  gravity: -9.81
+  jumpHeight: 2
+  dashForce: 20
+  dashDuration: 0.2
+  dashCooldown: 1
+  wallJumpForce: 10
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  wallJumpDetectionRange: 1
+  slideSpeed: 15
+  slideDuration: 0.5
 --- !u!1 &485641870 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7441508677729872493, guid: 9c5a2025f796b3245aba82f1a9c9caa2, type: 3}

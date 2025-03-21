@@ -30,6 +30,9 @@ public class DashManager : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI dashText;
 
+    [Header("Other variables")]
+    private float DesiredMoveSpeed;
+
 
     private void Start()
     {

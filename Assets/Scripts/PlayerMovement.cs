@@ -49,6 +49,12 @@ public class PlayerMovement : MonoBehaviour
     public float maxFOV;
     public float fovLerpSpeed;
 
+    [Header("Dash Variables")]
+    private float DesiredMoveSpeed;
+    private float LaseDesiredMoveSpeed;
+    private MovementState LastState;
+    private bool KeepMomentum;
+
     float horizontalInput;
     float verticalInput;
     
@@ -110,13 +116,13 @@ public class PlayerMovement : MonoBehaviour
         if(IsGrounded)
         {
             state = MovementState.walking;
-            movementSpeed = walkSpeed;
+            DesiredMoveSpeed = walkSpeed;
         }
         
         if(!IsGrounded)
         {
             state = MovementState.air;
-            movementSpeed = airSpeed;
+            DesiredMoveSpeed = airSpeed;
         }
         if(OnSlope())
         {
@@ -126,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
         if(dashing)
         {
             state = MovementState.dashing;
-            movementSpeed  = dashSpeed;
+            DesiredMoveSpeed  = dashSpeed;
         }
     }
 
