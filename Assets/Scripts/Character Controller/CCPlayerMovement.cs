@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class CCPlayerMovement : MonoBehaviour
 {
@@ -25,16 +26,24 @@ public class CCPlayerMovement : MonoBehaviour
     public float slideDuration = 0.5f;
     private bool isSliding = false;
 
+    [Header("UI")]
+    public TextMeshProUGUI VelocityText;
+    public TextMeshProUGUI PlayerStateText;
+    public TextMeshProUGUI PlayerFOVText;
+    public TextMeshProUGUI PlayerHealthText;
+
     private CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
     private bool isDashing = false;
     private float originalHeight;
+    private Vector3 previousPosition;
 
     private void Start()
     {
         controller = GetComponent<CharacterController>();
         originalHeight = controller.height;
+        previousPosition = transform.position;
     }
 
     private void Update()
@@ -50,7 +59,7 @@ public class CCPlayerMovement : MonoBehaviour
         float moveZ = Input.GetAxis("Vertical");
 
         Vector3 move = transform.right * moveX + transform.forward * moveZ;
-        float speed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed;
+        float speed = walkSpeed;
 
         if (!isDashing && !isSliding)
         {
@@ -129,5 +138,41 @@ public class CCPlayerMovement : MonoBehaviour
     {
         velocity.y = Mathf.Sqrt(wallJumpForce * -2f * gravity);
         velocity += transform.forward * 5f;
+    }
+
+    private void UpdateUI()
+{
+    if (VelocityText != null)
+    {
+        Vector3 currentPosition = transform.position;
+        float velocityMagnitude = (currentPosition - previousPosition).magnitude / Time.deltaTime;
+        previousPosition = currentPosition;
+
+        VelocityText.text = "Vitesse : " + velocityMagnitude.ToString("F2");
+        if (velocityMagnitude > 21)
+        {
+            VelocityText.color = Color.red;
+            VelocityText.text = "Vitesse : " + velocityMagnitude.ToString("F2") + " ! ! !";
+        }
+        else
+        {
+            VelocityText.color = Color.white;
+        }
+        }
+
+        if (PlayerStateText != null)
+        {
+            PlayerStateText.text = "Player State : " + state;
+        }
+
+        if (PlayerFOVText != null)
+        {
+            PlayerFOVText.text = "Actual FOV : " + playerCamera.fieldOfView;
+        }
+
+        if (PlayerHealthText != null)
+        {
+            PlayerHealthText.text = "Health : " + hlth.playerHealth;
+        }
     }
 }
