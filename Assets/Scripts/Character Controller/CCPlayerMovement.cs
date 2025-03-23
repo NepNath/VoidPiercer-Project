@@ -10,6 +10,12 @@ public class CCPlayerMovement : MonoBehaviour
     public float gravity = -9.81f;
     public float jumpHeight = 2f;
 
+    [Header("References")]
+    public Camera playerCamera;
+    PlayerHealthManager hlth;
+    PlayerMovement pm;
+
+
     [Header("Dash")]
     public float dashForce = 20f;
     public float dashDuration = 0.2f;
@@ -32,6 +38,10 @@ public class CCPlayerMovement : MonoBehaviour
     public TextMeshProUGUI PlayerFOVText;
     public TextMeshProUGUI PlayerHealthText;
 
+    [Header("Raycast Colors")]
+    public Color WallRay;
+    public Color LookRay;
+
     private CharacterController controller;
     private Vector3 velocity;
     private bool isGrounded;
@@ -44,6 +54,8 @@ public class CCPlayerMovement : MonoBehaviour
         controller = GetComponent<CharacterController>();
         originalHeight = controller.height;
         previousPosition = transform.position;
+        hlth = GetComponent<PlayerHealthManager>();
+        pm = GetComponent<PlayerMovement>();
     }
 
     private void Update()
@@ -55,10 +67,10 @@ public class CCPlayerMovement : MonoBehaviour
             velocity.y = -2f;
         }
 
-        float moveX = Input.GetAxis("Horizontal");
-        float moveZ = Input.GetAxis("Vertical");
+        float InputX = Input.GetAxis("Horizontal");
+        float InputZ = Input.GetAxis("Vertical");
 
-        Vector3 move = transform.right * moveX + transform.forward * moveZ;
+        Vector3 move = transform.right * InputX + transform.forward * InputZ;
         float speed = walkSpeed;
 
         if (!isDashing && !isSliding)
@@ -88,6 +100,10 @@ public class CCPlayerMovement : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+
+        UpdateUI();
+        RaycastsDraw();
     }
 
     private void Jump()
@@ -141,38 +157,41 @@ public class CCPlayerMovement : MonoBehaviour
     }
 
     private void UpdateUI()
-{
-    if (VelocityText != null)
     {
-        Vector3 currentPosition = transform.position;
-        float velocityMagnitude = (currentPosition - previousPosition).magnitude / Time.deltaTime;
-        previousPosition = currentPosition;
+        if (VelocityText != null)
+        {
+            Vector3 currentPosition = transform.position;
+            float velocityMagnitude = (currentPosition - previousPosition).magnitude / Time.deltaTime;
+            previousPosition = currentPosition;
 
-        VelocityText.text = "Vitesse : " + velocityMagnitude.ToString("F2");
-        if (velocityMagnitude > 21)
-        {
-            VelocityText.color = Color.red;
-            VelocityText.text = "Vitesse : " + velocityMagnitude.ToString("F2") + " ! ! !";
-        }
-        else
-        {
-            VelocityText.color = Color.white;
-        }
-        }
+            VelocityText.text = "Vitesse : " + velocityMagnitude.ToString("F2");
+            if (velocityMagnitude > 21)
+            {
+                VelocityText.color = Color.red;
+                VelocityText.text = "Vitesse : " + velocityMagnitude.ToString("F2") + " ! ! !";
+            }
+            else
+            {
+                VelocityText.color = Color.white;
+            }
+            }
 
-        if (PlayerStateText != null)
-        {
-            PlayerStateText.text = "Player State : " + state;
-        }
+            if (PlayerFOVText != null)
+            {
+                PlayerFOVText.text = "Actual FOV : " + playerCamera.fieldOfView;
+            }
 
-        if (PlayerFOVText != null)
-        {
-            PlayerFOVText.text = "Actual FOV : " + playerCamera.fieldOfView;
-        }
+            if (PlayerHealthText != null)
+            {
+                PlayerHealthText.text = "Health : " + hlth.playerHealth;
+            }
+    }
 
-        if (PlayerHealthText != null)
-        {
-            PlayerHealthText.text = "Health : " + hlth.playerHealth;
-        }
+    private void RaycastsDraw()
+    {
+        Debug.DrawRay(transform.position, transform.right * wallJumpDetectionRange, WallRay);
+        Debug.DrawRay(transform.position, -transform.right * wallJumpDetectionRange, WallRay);
+        Debug.DrawRay(transform.position, transform.forward * wallJumpDetectionRange, WallRay);
+        Debug.DrawRay(transform.position, -transform.forward * wallJumpDetectionRange, WallRay);
     }
 }

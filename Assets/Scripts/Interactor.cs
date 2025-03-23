@@ -8,10 +8,17 @@ public class Interactor : MonoBehaviour
    public float Range;
    public KeyCode InteractKey = KeyCode.E;
 
+   CCPlayerMovement CCpm;
+
+    private void Start()
+    {
+        CCpm = GetComponent<CCPlayerMovement>();
+    }
+
 
     private void Update()
     {
-        Debug.DrawRay(Source.position, Source.forward * Range, Color.magenta);  
+        Debug.DrawRay(Source.position, Source.forward * Range, CCpm.LookRay);  
         //should draw a raycast of where the player is looking
         //and be as long as the interaction range
 
