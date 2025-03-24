@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using TMPro;
+using NUnit.Framework.Internal;
 
 public class CCPlayerMovement : MonoBehaviour
 {
@@ -8,12 +9,21 @@ public class CCPlayerMovement : MonoBehaviour
     public float walkSpeed = 7f;
     public float sprintSpeed = 12f;
     public float gravity = -9.81f;
-    public float jumpHeight = 2f;
+   
+    
+    Vector3 moveDirection;
+    Vector3 move;
 
     [Header("References")]
     public Camera playerCamera;
     PlayerHealthManager hlth;
+    public LayerMask Ground;
     PlayerMovement pm;
+
+    [Header("PlayerInput")]
+    float horizontalInput;
+    float verticalInput;
+
 
 
     [Header("Dash")]
@@ -21,6 +31,10 @@ public class CCPlayerMovement : MonoBehaviour
     public float dashDuration = 0.2f;
     public float dashCooldown = 1f;
     private bool canDash = true;
+
+    [Header("jump")]
+     public float jumpHeight = 2f;
+    public float CharaControlHeightExtend;
 
     [Header("Wall Jump")]
     public float wallJumpForce = 10f;
@@ -30,7 +44,6 @@ public class CCPlayerMovement : MonoBehaviour
     [Header("Slide")]
     public float slideSpeed = 15f;
     public float slideDuration = 0.5f;
-    private bool isSliding = false;
 
     [Header("UI")]
     public TextMeshProUGUI VelocityText;
@@ -41,13 +54,15 @@ public class CCPlayerMovement : MonoBehaviour
     [Header("Raycast Colors")]
     public Color WallRay;
     public Color LookRay;
+    public Color GroundedRay;
 
     private CharacterController controller;
     private Vector3 velocity;
-    private bool isGrounded;
+    private bool isRayGrounded;
     private bool isDashing = false;
     private float originalHeight;
     private Vector3 previousPosition;
+    
 
     private void Start()
     {
@@ -60,55 +75,61 @@ public class CCPlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        isGrounded = controller.isGrounded;
 
-        if (isGrounded && velocity.y < 0)
+        //--------------------------making variables--------------------------
+        isRayGrounded = Physics.Raycast(transform.position, -transform.up, controller.height * CharaControlHeightExtend, Ground);
+
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+        move = transform.forward * verticalInput + transform.right * horizontalInput; 
+        
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
+        // --------------------------------------------------------------------
+
+
+
+        //--------------------------calling methods--------------------------
+        UpdateUI();
+        RaycastsDraw();
+        PlayerMovement();
+        Dash();
+        textDebug();
+        //--------------------------------------------------------------------
+    }
+
+
+    private void PlayerMovement()
+    {
+        float speed = walkSpeed;
+
+        if (isRayGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
-
-        float InputX = Input.GetAxis("Horizontal");
-        float InputZ = Input.GetAxis("Vertical");
-
-        Vector3 move = transform.right * InputX + transform.forward * InputZ;
-        float speed = walkSpeed;
-
-        if (!isDashing && !isSliding)
+        
+        if (!isDashing)
         {
-            controller.Move(move * speed * Time.deltaTime);
+            controller.Move(move.normalized * speed * Time.deltaTime);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && isRayGrounded)
         {
             Jump();
         }
-
-        if (Input.GetKeyDown(KeyCode.LeftControl) && isGrounded)
-        {
-            StartCoroutine(Slide());
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
-        {
-            StartCoroutine(Dash(move));
-        }
-
-        if (!isGrounded && CheckWall() && Input.GetKeyDown(KeyCode.Space))
-        {
-            WallJump();
-        }
-
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
-
-
-        UpdateUI();
-        RaycastsDraw();
     }
 
     private void Jump()
     {
         velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+    }
+
+    private void Dash()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
+        {
+            StartCoroutine(Dash(move));
+        }
     }
 
     private IEnumerator Dash(Vector3 direction)
@@ -122,39 +143,11 @@ public class CCPlayerMovement : MonoBehaviour
             controller.Move(direction.normalized * dashForce * Time.deltaTime);
             yield return null;
         }
-
         isDashing = false;
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
 
-    private IEnumerator Slide()
-    {
-        isSliding = true;
-        controller.height = originalHeight / 2;
-        float startTime = Time.time;
-
-        while (Time.time < startTime + slideDuration)
-        {
-            controller.Move(transform.forward * slideSpeed * Time.deltaTime);
-            yield return null;
-        }
-
-        controller.height = originalHeight;
-        isSliding = false;
-    }
-
-    private bool CheckWall()
-    {
-        return Physics.Raycast(transform.position, transform.right, wallJumpDetectionRange, wallLayer) ||
-               Physics.Raycast(transform.position, -transform.right, wallJumpDetectionRange, wallLayer);
-    }
-
-    private void WallJump()
-    {
-        velocity.y = Mathf.Sqrt(wallJumpForce * -2f * gravity);
-        velocity += transform.forward * 5f;
-    }
 
     private void UpdateUI()
     {
@@ -174,17 +167,17 @@ public class CCPlayerMovement : MonoBehaviour
             {
                 VelocityText.color = Color.white;
             }
-            }
+        }
 
-            if (PlayerFOVText != null)
-            {
-                PlayerFOVText.text = "Actual FOV : " + playerCamera.fieldOfView;
-            }
+        if (PlayerFOVText != null)
+        {
+            PlayerFOVText.text = "Actual FOV : " + playerCamera.fieldOfView;
+        }
 
-            if (PlayerHealthText != null)
-            {
-                PlayerHealthText.text = "Health : " + hlth.playerHealth;
-            }
+        if (PlayerHealthText != null)
+        {
+            PlayerHealthText.text = "Health : " + hlth.playerHealth;
+        }
     }
 
     private void RaycastsDraw()
@@ -193,5 +186,27 @@ public class CCPlayerMovement : MonoBehaviour
         Debug.DrawRay(transform.position, -transform.right * wallJumpDetectionRange, WallRay);
         Debug.DrawRay(transform.position, transform.forward * wallJumpDetectionRange, WallRay);
         Debug.DrawRay(transform.position, -transform.forward * wallJumpDetectionRange, WallRay);
+        Debug.DrawRay(transform.position, -transform.up * controller.height * CharaControlHeightExtend, GroundedRay);
+    }
+
+    private bool WallRayCasts()
+    {
+        return Physics.Raycast(transform.position, transform.right, wallJumpDetectionRange, wallLayer) ||
+        Physics.Raycast(transform.position, -transform.right, wallJumpDetectionRange, wallLayer) ||
+        Physics.Raycast(transform.position, transform.forward, wallJumpDetectionRange, wallLayer) ||
+        Physics.Raycast(transform.position, -transform.forward, wallJumpDetectionRange, wallLayer);
+    }   
+
+    private void textDebug()
+    {
+        if(isRayGrounded)
+        {
+            Debug.Log("Player Is Grounded by Raycast");
+        }
+
+        if (WallRayCasts())
+        {
+            Debug.Log("Colliding Wall");
+        }
     }
 }
