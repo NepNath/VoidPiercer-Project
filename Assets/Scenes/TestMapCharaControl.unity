@@ -751,7 +751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b44fcfe0a885b0b4d84647fa100cb088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 10
+  Health: 1
 --- !u!65 &286708065
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -771,8 +771,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9999998, y: 1.76354, z: 0.9999999}
-  m_Center: {x: 0, y: 0.38177168, z: 0}
+  m_Size: {x: 0.9999998, y: 10, z: 0.9999999}
+  m_Center: {x: 0, y: 5, z: 0}
 --- !u!23 &286708066
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1315,7 +1315,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   playerHealth: 100
-  CoroutineSeconds: 1
+  DamageCoroutineSeconds: 1
+  HealingCoroutineSeconds: 0.05
   IsTakingDamages: 0
   IsBeingHealed: 0
 --- !u!114 &464492117
@@ -1419,14 +1420,21 @@ MonoBehaviour:
   sprintSpeed: 12
   gravity: -9.81
   playerCamera: {fileID: 988973676}
-  Ground:
-    serializedVersion: 2
-    m_Bits: 0
   dashForce: 20
   dashDuration: 0.2
   dashCooldown: 0
+  rechargeTime: 1
+  maxDash: 3
   jumpHeight: 2
   CharaControlHeightExtend: 0.55
+  isRayGrounded: 0
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  jumpRechargeTimer: 0.25
+  CanJump: 1
+  IsJumping: 0
+  maxjump: 3
   wallJumpForce: 10
   wallLayer:
     serializedVersion: 2
@@ -1434,8 +1442,9 @@ MonoBehaviour:
   wallJumpDetectionRange: 1
   slideSpeed: 15
   slideDuration: 0.5
-  VelocityText: {fileID: 1252418269}
-  PlayerStateText: {fileID: 1230032577}
+  VelocityText: {fileID: 1230032577}
+  JumpText: {fileID: 1252418269}
+  DashText: {fileID: 672262402}
   PlayerFOVText: {fileID: 878712786}
   PlayerHealthText: {fileID: 451876698}
   WallRay: {r: 0, g: 0.754717, b: 0.616011, a: 1}
@@ -1629,8 +1638,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9999998, y: 1.76354, z: 0.9999999}
-  m_Center: {x: 0, y: 0.38177168, z: 0}
+  m_Size: {x: 0.9999998, y: 10, z: 0.9999999}
+  m_Center: {x: 0, y: 5, z: 0}
 --- !u!23 &564006889
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2522,7 +2531,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: FOV
+  m_text: FOV - Broken
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3202,7 +3211,7 @@ GameObject:
   - component: {fileID: 1230032578}
   - component: {fileID: 1230032577}
   m_Layer: 5
-  m_Name: State Text
+  m_Name: Velocity Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3247,7 +3256,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: State
+  m_text: Velocity
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3446,7 +3455,7 @@ GameObject:
   - component: {fileID: 1252418270}
   - component: {fileID: 1252418269}
   m_Layer: 5
-  m_Name: Velocity Text
+  m_Name: Jump Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3491,7 +3500,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Velocity
+  m_text: Jump
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

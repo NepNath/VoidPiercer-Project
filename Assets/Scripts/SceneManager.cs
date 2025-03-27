@@ -5,7 +5,7 @@ public class SceneManager : MonoBehaviour
     void Update()
     {
        if(Input.GetKeyDown("k")){
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("TestMapCharaControl");
         }
         
     }

@@ -8,7 +8,8 @@ public class PlayerHealthManager : MonoBehaviour
     [Header("Health Management")]
    public float maxHealth;
    public float playerHealth;
-   public float CoroutineSeconds;
+   public float DamageCoroutineSeconds;
+   public float HealingCoroutineSeconds;
    private float damage;
    public bool IsTakingDamages = false;
    public bool IsBeingHealed = false;
@@ -48,6 +49,7 @@ public class PlayerHealthManager : MonoBehaviour
         }
     }
 
+
     public void OnTriggerExit(Collider other)
     {
         Debug.Log("Left Damage Trigger");
@@ -55,11 +57,13 @@ public class PlayerHealthManager : MonoBehaviour
         {
             StopCoroutine(DamageCoroutine);
             DamageCoroutine = null;
+            IsTakingDamages = false;
         }
          if(other.CompareTag("HealZone"))
         {
             Debug.Log("Healing");
             StopCoroutine(HealCodroutine);
+            IsBeingHealed = false;
         }
     }
 
@@ -69,7 +73,7 @@ public class PlayerHealthManager : MonoBehaviour
         while(playerHealth > 0)
         {
             Debug.Log("Taking Damages");
-            yield return new WaitForSeconds(CoroutineSeconds);
+            yield return new WaitForSeconds(DamageCoroutineSeconds);
             playerHealth -= Damage;
         }
         IsTakingDamages = false;
@@ -80,7 +84,7 @@ public class PlayerHealthManager : MonoBehaviour
         IsBeingHealed = true;
         while(playerHealth < maxHealth)
         {
-            yield return new WaitForSeconds(CoroutineSeconds);
+            yield return new WaitForSeconds(HealingCoroutineSeconds);
             playerHealth += Heal;
         }
         IsBeingHealed = false;
