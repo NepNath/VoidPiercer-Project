@@ -11,13 +11,16 @@ public class CCPlayerMovement : MonoBehaviour
     public float walkSpeed = 7f;
     public float sprintSpeed = 12f;
     public float gravity = -9.81f;
-   
+    public float impulseForce = 2f;
+    public float impulseCancelForce = -2f;
     Vector3 move;
+   
 
     [Header("References")]
     public Camera playerCamera;
     PlayerMovement pm;
     PlayerHealthManager hlth;
+    public GameObject WallJumpOrigin;
 
     [Header("PlayerInput")]
     float horizontalInput;
@@ -49,6 +52,9 @@ public class CCPlayerMovement : MonoBehaviour
     public float wallJumpForce = 10f;
     public LayerMask wallLayer;
     public float wallJumpDetectionRange = 1f;
+    public float elapsedTime = 0f;
+    public float wallJumpDuration = 0.5f;
+    public bool IsWallJumping;
 
     [Header("Slide")]
     public float slideSpeed = 15f;
@@ -63,6 +69,10 @@ public class CCPlayerMovement : MonoBehaviour
 
     [Header("Raycast Colors")]
     public Color WallRay;
+    public Color WallRayFront;
+    public Color WallRayBack;
+    public Color WallRayRight;
+    public Color WallRayLeft;
     public Color LookRay;
     public Color GroundedRay;
 
@@ -95,7 +105,7 @@ public class CCPlayerMovement : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
         // --------------------------------------------------------------------
 
-
+        
 
         //--------------------------calling methods--------------------------
         UpdateUI();
@@ -105,19 +115,8 @@ public class CCPlayerMovement : MonoBehaviour
         textDebug();
         DshRrgManager();
         jumpRecharge();
+        ResetLinearVelocity();
         //--------------------------------------------------------------------
-
-        if(Input.GetKeyDown(KeyCode.Keypad5))
-        {
-           velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-           velocity.z = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-
-        if(velocity.z > 0)
-        {
-            velocity.z += gravity * Time.deltaTime; //je dois ajouter une force de pression pour stabiliser le joueur
-        }
-       
     }
 
 
@@ -130,16 +129,55 @@ public class CCPlayerMovement : MonoBehaviour
             velocity.y = -2f;
         }
         
-        if (!isDashing)
+        if (!isDashing && !IsWallJumping)
         {
             controller.Move(move.normalized * speed * Time.deltaTime);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && jumpCounter > 0 && CanJump)
+        //--------------------------Player Jump & wall jump--------------------------
+        if (Input.GetKeyDown(KeyCode.Space) && jumpCounter > 0 && CanJump && !CollideFrontwall() && !CollideBackwall() && !CollideLeftwall() && !CollideRightwall())
         {
             StartCoroutine(Jump());
+            ResetLinearVelocity();
+            IsWallJumping = false;
+        }
+        
+        else if(Input.GetKeyDown(KeyCode.Space) && isRayGrounded && !IsWallJumping)
+        {
+            ResetLinearVelocity();
+            StartCoroutine(Jump());
+        }
+
+        else if(Input.GetKeyDown(KeyCode.Space) && CollideBackwall())
+        {
+            Debug.Log("back wall Jump");
+            velocity.y = Mathf.Sqrt(impulseForce * -2f * gravity);
+            velocity += transform.forward * Mathf.Sqrt(impulseForce * -2f * gravity);
+            IsWallJumping = true;
 
         }
+
+        else if(Input.GetKeyDown(KeyCode.Space) && CollideFrontwall())
+        {
+            velocity.y = Mathf.Sqrt(impulseForce * -2f * gravity);
+            velocity += -transform.forward * Mathf.Sqrt(impulseForce * -2f * gravity);
+            IsWallJumping = true;
+        }
+
+        else if(Input.GetKeyDown(KeyCode.Space) && CollideRightwall())
+        {
+            velocity.y = Mathf.Sqrt(impulseForce * -2f * gravity);
+            velocity += -transform.right * Mathf.Sqrt(impulseForce * -2f * gravity);
+            IsWallJumping = true;
+        }
+
+        else if(Input.GetKeyDown(KeyCode.Space) && CollideLeftwall())
+        {
+            velocity.y = Mathf.Sqrt(impulseForce * -2f * gravity);
+            velocity += transform.right * Mathf.Sqrt(impulseForce * -2f * gravity);
+            IsWallJumping = true;
+        }
+        //--------------------------------------------------------------------
     }
 
     public void Addforce(Vector3 force)
@@ -147,6 +185,15 @@ public class CCPlayerMovement : MonoBehaviour
         velocity += force;
     }
 
+    private void ResetLinearVelocity()
+    {
+        Debug.Log("Reseting LinearVelocity");
+        if(isRayGrounded)
+        {
+            velocity = new Vector3(0,velocity.y,0);
+            IsWallJumping = false;
+        }
+    }
 
     private IEnumerator Jump()
     {
@@ -270,30 +317,48 @@ public class CCPlayerMovement : MonoBehaviour
 
     private void RaycastsDraw()
     {
-        Debug.DrawRay(transform.position, transform.right * wallJumpDetectionRange, WallRay);
-        Debug.DrawRay(transform.position, -transform.right * wallJumpDetectionRange, WallRay);
-        Debug.DrawRay(transform.position, transform.forward * wallJumpDetectionRange, WallRay);
-        Debug.DrawRay(transform.position, -transform.forward * wallJumpDetectionRange, WallRay);
-        Debug.DrawRay(transform.position, -transform.up * controller.height * CharaControlHeightExtend, GroundedRay);
+        Debug.DrawRay(WallJumpOrigin.transform.position, -transform.up * controller.height * CharaControlHeightExtend, GroundedRay);
     }
 
-    private bool WallRayCasts()
+    private bool CollideFrontwall()
     {
-        return Physics.Raycast(transform.position, transform.right, wallJumpDetectionRange, wallLayer) ||
-        Physics.Raycast(transform.position, -transform.right, wallJumpDetectionRange, wallLayer) ||
-        Physics.Raycast(transform.position, transform.forward, wallJumpDetectionRange, wallLayer) ||
-        Physics.Raycast(transform.position, -transform.forward, wallJumpDetectionRange, wallLayer);
-    }   
+        Debug.DrawRay(WallJumpOrigin.transform.position, transform.forward * wallJumpDetectionRange, WallRayFront);
+        return Physics.Raycast(WallJumpOrigin.transform.position, transform.forward, wallJumpDetectionRange, wallLayer);
+    }
+
+    private bool CollideBackwall()
+    {
+        Debug.DrawRay(WallJumpOrigin.transform.position, -transform.forward * wallJumpDetectionRange, WallRayBack);
+        return Physics.Raycast(WallJumpOrigin.transform.position, -transform.forward, wallJumpDetectionRange, wallLayer);
+    }
+
+    private bool CollideRightwall()
+    {
+        Debug.DrawRay(WallJumpOrigin.transform.position, transform.right * wallJumpDetectionRange, WallRayRight);
+        return Physics.Raycast(WallJumpOrigin.transform.position, transform.right, wallJumpDetectionRange, wallLayer);
+    }
+
+    private bool CollideLeftwall()
+    {
+        Debug.DrawRay(WallJumpOrigin.transform.position, -transform.right * wallJumpDetectionRange, WallRayLeft);
+        return Physics.Raycast(WallJumpOrigin.transform.position, -transform.right, wallJumpDetectionRange, wallLayer);
+    }
+
     private void textDebug()
     {
-        if(isRayGrounded)
+        if (isRayGrounded)
         {
             Debug.Log("Player Is Grounded by Raycast");
         }
 
-        if (WallRayCasts())
-        {
-            Debug.Log("Colliding Wall");
+        if (CollideFrontwall()){
+            Debug.Log("Colliding Front Wall");
+        }else if (CollideBackwall()){
+            Debug.Log("Colliding Back Wall");
+        }else if (CollideRightwall()){
+            Debug.Log("Colliding Right Wall");
+        }else if (CollideLeftwall()){
+            Debug.Log("Colliding Left Wall");
         }
     }
 }
