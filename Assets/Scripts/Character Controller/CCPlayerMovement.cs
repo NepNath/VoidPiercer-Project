@@ -154,7 +154,6 @@ public class CCPlayerMovement : MonoBehaviour
             velocity.y = Mathf.Sqrt(impulseForce * -2f * gravity);
             velocity += transform.forward * Mathf.Sqrt(impulseForce * -2f * gravity);
             IsWallJumping = true;
-
         }
 
         else if(Input.GetKeyDown(KeyCode.Space) && CollideFrontwall())

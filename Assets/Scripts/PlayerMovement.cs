@@ -185,7 +185,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 Vector3 limitedVel = flatVel.normalized * movementSpeed;
                 rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
-
             }
         }
         
