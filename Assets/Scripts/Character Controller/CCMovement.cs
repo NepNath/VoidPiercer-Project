@@ -29,6 +29,8 @@ public class Movement : MonoBehaviour
     public float wallJumpDetectionRange;
     public LayerMask wallLayer;
     public float WallJumpForce;
+    public int MaxWallJump;
+    private int WallJumpLeft = 0;
     private bool IsWallJumping;
 
     [Header("RayGround")]
@@ -50,6 +52,7 @@ public class Movement : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         JumpLeft = MaxJump;
+        WallJumpLeft = MaxWallJump;
     }
 
     void Update()
@@ -111,6 +114,8 @@ public class Movement : MonoBehaviour
         {
             JumpLeft = MaxJump;
         }
+
+        
     }
 
 
@@ -145,6 +150,7 @@ public class Movement : MonoBehaviour
     {
         
         IsWallJumping = true;
+        WallJumpLeft -= 1;
         Debug.Log("Wall Jump!");
 
         // Impulsion en Y pour donner du saut

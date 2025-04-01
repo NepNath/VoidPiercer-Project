@@ -1293,7 +1293,6 @@ GameObject:
   - component: {fileID: 464492122}
   - component: {fileID: 464492123}
   - component: {fileID: 464492125}
-  - component: {fileID: 464492126}
   - component: {fileID: 464492124}
   m_Layer: 0
   m_Name: PlayerComponentCC
@@ -1424,7 +1423,6 @@ MonoBehaviour:
   gravity: -10
   jumpHeight: 6
   MaxJump: 3
-  JumpLeft: 0
   JumpRechargeSeconds: 0.3
   WallJumpOrigin: {fileID: 884367598}
   wallJumpDetectionRange: 1
@@ -1432,24 +1430,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   WallJumpForce: 10
+  MaxWallJump: 0
   GroundedRayLength: 1.1
   GroundedRayColor: {r: 0.05724919, g: 1, b: 0, a: 1}
   WallRayFront: {r: 0, g: 0.13983417, b: 1, a: 1}
   WallRayBack: {r: 0, g: 1, b: 0.77932477, a: 1}
   WallRayRight: {r: 1, g: 0, b: 0, a: 1}
   WallRayLeft: {r: 1, g: 0.42477313, b: 0, a: 1}
---- !u!114 &464492126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 464492115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a81cdd5ebb235040aa6e84482c8fe65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &485641870 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7441508677729872493, guid: 9c5a2025f796b3245aba82f1a9c9caa2, type: 3}
