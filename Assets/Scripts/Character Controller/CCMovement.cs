@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,6 +18,11 @@ public class Movement : MonoBehaviour
 
     [Header("PlayerJump")]
     public float jumpHeight = 6f;
+    public int MaxJump;
+    private int JumpLeft = 0;
+    private bool IsJumping;
+    private bool CanJump = true;
+    public float JumpRechargeSeconds = 1f;
 
     [Header("WallJump")]
     public GameObject WallJumpOrigin;
@@ -30,7 +36,10 @@ public class Movement : MonoBehaviour
     public Color GroundedRayColor;
 
     [Header("Raycast Colors")]
-    public Color WallRayFront, WallRayBack, WallRayRight, WallRayLeft;
+    public Color WallRayFront;
+    public Color WallRayBack;
+    public Color WallRayRight;
+    public Color WallRayLeft;
 
     CharacterController controller;
     Vector3 velocity;
@@ -40,6 +49,7 @@ public class Movement : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        JumpLeft = MaxJump;
     }
 
     void Update()
@@ -48,7 +58,7 @@ public class Movement : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         GravityControl();
-        PlayerMove();
+        PlayerMove(); 
         isRayGrounded();
         DrawRays();
         PlayerJump();
@@ -84,12 +94,38 @@ public class Movement : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 
-    private void PlayerJump()
+    private void PlayerJump() //appel de l'ienumerator la dedans
     {
-        if (Input.GetKeyDown(JumpInput) && isRayGrounded())
+        if (Input.GetKeyDown(JumpInput) && JumpLeft > 0 && CanJump )
         {
-            velocityY = Mathf.Sqrt(jumpHeight * -2 * gravity);
+
+            StartCoroutine(Jump());
         }
+        resetJump();
+
+    }
+
+    private void resetJump()
+    {
+        if(isRayGrounded() || IsWallJumping)
+        {
+            JumpLeft = MaxJump;
+        }
+    }
+
+
+
+    private IEnumerator Jump()
+    {
+        IsJumping = true;
+        CanJump = false;
+        JumpLeft -= 1;
+
+        velocityY = Mathf.Sqrt(jumpHeight * -2 * gravity);
+        yield return new WaitForSeconds(JumpRechargeSeconds);
+
+        IsJumping = false;
+        CanJump = true;
     }
 
     private void PlayerWallJump()
@@ -107,6 +143,7 @@ public class Movement : MonoBehaviour
 
     private void ApplyWallJump(Vector3 direction)
     {
+        
         IsWallJumping = true;
         Debug.Log("Wall Jump!");
 

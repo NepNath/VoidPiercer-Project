@@ -89,6 +89,7 @@ public class CCPlayerMovement : MonoBehaviour
         previousPosition = transform.position;
         pm = GetComponent<PlayerMovement>();
         hlth = GetComponent<PlayerHealthManager>();
+
     }
 
     private void Update()
@@ -361,3 +362,5 @@ public class CCPlayerMovement : MonoBehaviour
         }
     }
 }
+
+//j'attend toujour que Lucas Travaille 

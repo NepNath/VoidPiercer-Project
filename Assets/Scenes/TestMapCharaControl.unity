@@ -1423,6 +1423,9 @@ MonoBehaviour:
   Speed: 6
   gravity: -10
   jumpHeight: 6
+  MaxJump: 3
+  JumpLeft: 0
+  JumpRechargeSeconds: 0.3
   WallJumpOrigin: {fileID: 884367598}
   wallJumpDetectionRange: 1
   wallLayer:
