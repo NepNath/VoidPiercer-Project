@@ -18,7 +18,7 @@ public class Interactor : MonoBehaviour
 
     private void Update()
     {
-        Debug.DrawRay(Source.position, Source.forward * Range, CCpm.LookRay);  
+        // Debug.DrawRay(Source.position, Source.forward * Range, CCpm.LookRay);  
         //should draw a raycast of where the player is looking
         //and be as long as the interaction range
 

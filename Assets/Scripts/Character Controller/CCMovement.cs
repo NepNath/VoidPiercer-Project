@@ -35,7 +35,7 @@ public class Movement : MonoBehaviour
     CharacterController controller;
     Vector3 velocity;
     float velocityY;
-    float decelerationRate = 10f; // Facteur de ralentissement après un Wall Jump
+    float decelerationRate = 1f; // Facteur de ralentissement après un Wall Jump
 
     void Start()
     {
@@ -122,7 +122,7 @@ public class Movement : MonoBehaviour
 
     IEnumerator EndWallJump()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.3f);
         IsWallJumping = false;
     }
 
