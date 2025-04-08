@@ -11,7 +11,7 @@ public class DashManager : MonoBehaviour
     public Transform orientation;
     public Transform playerCam;
     private Rigidbody rb;
-    private PlayerMovement pm; 
+    // private PlayerMovement pm; 
 
     [Header("Dashing")]
     public float dashForce;
@@ -36,7 +36,7 @@ public class DashManager : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        pm = GetComponent<PlayerMovement>();
+        // pm = GetComponent<PlayerMovement>();
     }
 
     private void Update()
@@ -62,7 +62,7 @@ public class DashManager : MonoBehaviour
         DelayedForceToApply = forceToApply;
         Invoke(nameof(DelayedDashForce), 0.025f);
         DashCount -= 1;
-        pm.dashing = true;
+        // pm.dashing = true;
         Invoke(nameof(ResetDash), dashDuration);
     }
     
@@ -90,7 +90,7 @@ public class DashManager : MonoBehaviour
 
     private void ResetDash()
     {
-        pm.dashing = false;
+        // pm.dashing = false;
     }
 
     private void UpdateUI()

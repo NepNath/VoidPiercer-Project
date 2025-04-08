@@ -18,7 +18,7 @@ public class CCPlayerMovement : MonoBehaviour
 
     [Header("References")]
     public Camera playerCamera;
-    PlayerMovement pm;
+    // PlayerMovement pm;
     PlayerHealthManager hlth;
     public GameObject WallJumpOrigin;
 
@@ -87,7 +87,7 @@ public class CCPlayerMovement : MonoBehaviour
         controller = GetComponent<CharacterController>();
         originalHeight = controller.height;
         previousPosition = transform.position;
-        pm = GetComponent<PlayerMovement>();
+        // pm = GetComponent<PlayerMovement>();
         hlth = GetComponent<PlayerHealthManager>();
 
     }
