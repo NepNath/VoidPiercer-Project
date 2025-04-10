@@ -9048,7 +9048,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Movement: {fileID: 1970388879}
   Rigidbody: {fileID: 1970388878}
-  DashForce: 10
+  DashForce: 100
   DashCooldown: 0.25
 --- !u!1 &2028459831
 GameObject:
