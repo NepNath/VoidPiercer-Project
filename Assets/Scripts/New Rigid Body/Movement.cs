@@ -40,6 +40,4 @@ public class Movement : MonoBehaviour
         return Physics.Raycast(transform.position, Vector3.down, GroundRayLength);
     }
 
-    
-
 }
