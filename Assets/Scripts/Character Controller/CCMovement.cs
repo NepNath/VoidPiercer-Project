@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Movement : MonoBehaviour
+public class CCMovement : MonoBehaviour
 {
     [Header("PlayerInput")]
     public KeyCode JumpInput = KeyCode.Space;
