@@ -15,51 +15,52 @@ public class Dash : MonoBehaviour
     [Header("dash")]
     public float DashCooldown;
     public float dashDuration;
-    private bool canDash;
+    [SerializeField] private bool canDash;
     private bool isDashing;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Movement = GetComponent<Movement>();
+        Rigidbody = GetComponent<Rigidbody>();
+
+        isDashing = false;
+        canDash = true;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         
-        PlayerInput = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+        PlayerInput = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")).normalized;
 
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        if(Input.GetKeyDown(KeyCode.LeftShift) && canDash && !isDashing)
         {
-            StartCoroutine(dashForce());
+            DashMTHD();
         }
-        resetDash();
     }
 
-
-    IEnumerator dashForce()
+    private void DashMTHD()
     {
         Rigidbody.AddForce(PlayerInput  * DashForce, ForceMode.Impulse);
-        yield return new WaitForSeconds(DashCooldown);
+        StartCoroutine(DashCoroutine());
     }
 
-    IEnumerator dashTime()
+    
+     IEnumerator DashCoroutine()
     {
-        canDash = false;
         isDashing = true;
-        float Timer = Time.time;
+        canDash = false;
+        float startTime = Time.time;
 
-        while (Time.time < Timer + dashDuration)
+        while(Time.time < startTime + dashDuration)
         {
-            Rigidbody.linearVelocity = new Vector3()
+            Rigidbody.AddForce(PlayerInput * DashForce * Time.deltaTime, ForceMode.Force);
+            yield return new WaitForSeconds(DashCooldown);
         }
-
-    }
-
-    void resetDash()
-    {
-        canDash = true;
         isDashing = false;
+        canDash = true;
+
     }
+   
 }
