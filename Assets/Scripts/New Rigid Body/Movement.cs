@@ -14,6 +14,7 @@ public class Movement : MonoBehaviour
     [Header("Mouvements")]
     [SerializeField] float moveSpeed = 6f;
     [SerializeField] float speedMultiplier;
+    [SerializeField] float airMultiplier = 0.4f;
     [SerializeField] float maxSpeed = 15f;
 
     [Header("Drags")]
@@ -53,7 +54,15 @@ public class Movement : MonoBehaviour
 
     private void PlayerMove()
     {
-        rb.AddForce(moveDirection.normalized * moveSpeed * speedMultiplier, ForceMode.Acceleration);
+
+        if(IsRayGrounded())
+        {
+            rb.AddForce(moveDirection.normalized * moveSpeed * speedMultiplier, ForceMode.Acceleration);
+        }
+        else if(!IsRayGrounded())
+        {
+            rb.AddForce(moveDirection.normalized * moveSpeed * speedMultiplier * airMultiplier, ForceMode.Acceleration);
+        }
         
     }
 
@@ -61,6 +70,7 @@ public class Movement : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space) && IsRayGrounded())
         {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
         }
     }
