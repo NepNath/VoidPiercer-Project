@@ -6,6 +6,6 @@ public class CameraHolder : MonoBehaviour
 
     private void Update()
     {
-        transform.position = CameraPosition.position;
+        transform.position = Vector3.Slerp(transform.position, CameraPosition.position, Time.deltaTime * 100f);
     }
 }
