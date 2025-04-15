@@ -36,6 +36,9 @@ public class ConsoleDebugs : MonoBehaviour
             Gizmos.DrawSphere(transform.position - orientation.right * 0.5f, wall.wallCheckRadius);
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(transform.position + orientation.right * 0.5f, wall.wallCheckRadius);
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(transform.position + orientation.forward * 0.5f, wall.wallCheckRadius);
+            Gizmos.DrawSphere(transform.position - orientation.forward * 0.5f, wall.wallCheckRadius);
         }
     }
 
@@ -48,6 +51,14 @@ public class ConsoleDebugs : MonoBehaviour
         if(wall.wallRight)
         {
             Debug.Log("Colliding wall on right");
+        }
+        if(wall.wallFront)
+        {
+            Debug.Log("Colliding wall on Front");
+        }
+        if(wall.wallBack)
+        {
+            Debug.Log("Colliding wall on Back");
         }
 
         //slope raycast

@@ -9,9 +9,13 @@ public class WallActions : MonoBehaviour
 
     RaycastHit LeftWallHit;
     RaycastHit RightWallHit;
+    RaycastHit FrontWallHit;
+    RaycastHit BackWallHit;
+    
 
     [Header("WallRun & Jump")]
     public bool isWallRunning;
+    public bool isClimbing;
     [SerializeField] float wallRunGravity;
     public float minimumHeight;
     public float wallJumpForce;
@@ -30,6 +34,7 @@ public class WallActions : MonoBehaviour
     void Update()
     {
         checkWall();
+        wallGrip();
 
         if (canWallRun())
         {
@@ -57,14 +62,22 @@ public class WallActions : MonoBehaviour
 
     void checkWall()
     {
-        
         wallLeft = Physics.SphereCast(transform.position, wallCheckRadius, -orientation.right, out LeftWallHit, wallDistance, wallTag);
         wallRight = Physics.SphereCast(transform.position,  wallCheckRadius, orientation.right, out RightWallHit, wallDistance, wallTag);
+        wallFront = Physics.SphereCast(transform.position,  wallCheckRadius, orientation.forward, out FrontWallHit, wallDistance, wallTag);
+        wallBack = Physics.SphereCast(transform.position,  wallCheckRadius, -orientation.forward, out BackWallHit, wallDistance, wallTag);
     }
 
     void wallGrip()
     {
-        
+        if(wallFront || wallBack)
+        {
+            isClimbing = true;
+        }
+        else
+        {
+            isClimbing = false;
+        }
     }
 
     void wallRun()
@@ -87,6 +100,20 @@ public class WallActions : MonoBehaviour
             if(wallRight)
             {
                 Vector3 wallRunDirection = transform.up + RightWallHit.normal;
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+                rb.AddForce(wallRunDirection * wallJumpForce, ForceMode.Impulse);   
+            }
+            if(wallFront)
+            {
+                Debug.Log("front jump");
+                Vector3 wallRunDirection = transform.up + FrontWallHit.normal;
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+                rb.AddForce(wallRunDirection * wallJumpForce, ForceMode.Impulse);   
+            }
+            if(wallBack)
+            {
+                Debug.Log("back jump");
+                Vector3 wallRunDirection = transform.up + BackWallHit.normal;
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
                 rb.AddForce(wallRunDirection * wallJumpForce, ForceMode.Impulse);   
             }

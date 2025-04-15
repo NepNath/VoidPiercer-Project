@@ -121,6 +121,10 @@ public class Movement : MonoBehaviour
             speedMultiplier = wallSpeedMultiplier;
             rb.linearDamping = wallDrag;
         }
+        else if(wall.isClimbing)
+        {
+            rb.linearDamping = wallDrag;
+        }
         else if (!IsGrounded())
         {
             speedMultiplier = 1f;
@@ -132,7 +136,6 @@ public class Movement : MonoBehaviour
     {
         horizontalMovement = Input.GetAxisRaw("Horizontal");
         verticalMovement = Input.GetAxisRaw("Vertical");
-
         moveDirection = orientaiton.forward * verticalMovement + orientaiton.right * horizontalMovement;
     }
 
