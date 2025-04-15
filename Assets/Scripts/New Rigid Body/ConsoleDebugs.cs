@@ -1,9 +1,11 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ConsoleDebugs : MonoBehaviour
 {
     private Movement move;
-    public WallActions wall;
+    private WallActions wall;
+    public Transform orientation;
 
     [SerializeField] bool showConsoleInfo;
     [SerializeField] bool showRaycasts;
@@ -31,9 +33,9 @@ public class ConsoleDebugs : MonoBehaviour
         {
             Gizmos.DrawSphere(transform.position - new Vector3(0,0.75f, 0), move.JumpGizmoRad);
             Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(transform.position - new Vector3(0.5f,0,0), wall.wallCheckRadius);
+            Gizmos.DrawSphere(transform.position - orientation.right * 0.5f, wall.wallCheckRadius * 1.75f);
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(transform.position - new Vector3(-0.5f,0,0), wall.wallCheckRadius);
+            Gizmos.DrawSphere(transform.position + orientation.right * 0.5f, wall.wallCheckRadius * 1.75f);
         }
     }
 
@@ -48,8 +50,9 @@ public class ConsoleDebugs : MonoBehaviour
             Debug.Log("Colliding wall on right");
         }
 
-        
+        //slope raycast
         Debug.DrawRay(transform.position, Vector3.down * move.GroundRayLength, Color.cyan);
+
         if(move.IsGrounded() && !move.OnSlope())
         {
             Debug.Log("Is Grounded");
