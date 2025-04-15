@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 49280418}
   - component: {fileID: 49280417}
   - component: {fileID: 49280416}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2947,7 +2947,7 @@ GameObject:
   - component: {fileID: 537983643}
   - component: {fileID: 537983642}
   - component: {fileID: 537983641}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10953,7 +10953,7 @@ GameObject:
   - component: {fileID: 1931043076}
   - component: {fileID: 1931043075}
   - component: {fileID: 1931043074}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11508,14 +11508,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 663121750}
   orientaiton: {fileID: 1443613998}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
   moveSpeed: 8
   speedMultiplier: 10
   airMultiplier: 0.4
   maxSpeed: 7
   GroundDrag: 10
   AirDrag: 1
-  JumpForce: 10
-  GroundRayLength: 1.01
+  JumpForce: 15
+  GroundRayLength: 2
+  JumpGizmoRad: 0.35
 --- !u!114 &1970388881
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using System;
+using System.IO.Compression;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class Movement : MonoBehaviour
     Rigidbody rb;
     [SerializeField] Transform cam;
     [SerializeField] Transform orientaiton;
+    [SerializeField] LayerMask groundLayer;
 
     [Header("Mouvements")]
     [SerializeField] float moveSpeed = 6f;
@@ -24,6 +26,11 @@ public class Movement : MonoBehaviour
     [Header("Jump")]
     public float JumpForce = 10f;
     [SerializeField] float GroundRayLength;
+    [SerializeField] float JumpGizmoRad;
+
+    [Header("Slope")]
+    RaycastHit SlopeHit;
+    Vector3 slopeMoveDirection;
 
     private float horizontalMovement;
     private float verticalMovement;
@@ -33,42 +40,61 @@ public class Movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-
     }
 
     private void Update()
     {
-        
         Inputs();
         Debugs();        
         jump();
         rbDrag();
 
+        slopeMoveDirection = Vector3.ProjectOnPlane(moveDirection, SlopeHit.normal);
     }
 
     private void FixedUpdate()
     {
         PlayerMove();
-        
     }
 
     private void PlayerMove()
     {
-
-        if(IsRayGrounded())
+        if(IsGrounded() && !OnSlope())
         {
             rb.AddForce(moveDirection.normalized * moveSpeed * speedMultiplier, ForceMode.Acceleration);
         }
-        else if(!IsRayGrounded())
+        else if(IsGrounded() && OnSlope())
         {
+            rb.useGravity = false;
+            rb.AddForce(slopeMoveDirection.normalized * moveSpeed * speedMultiplier, ForceMode.Acceleration);
+        }
+        else if(!IsGrounded())
+        {
+            rb.useGravity = true;
             rb.AddForce(moveDirection.normalized * moveSpeed * speedMultiplier * airMultiplier, ForceMode.Acceleration);
         }
         
     }
 
+    private bool OnSlope()
+    {
+        if(Physics.Raycast(transform.position, Vector3.down, out SlopeHit, GroundRayLength))
+        {
+            if(SlopeHit.normal != Vector3.up)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return false;
+    }
+
     void jump()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && IsRayGrounded())
+        if(Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
             rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
@@ -77,12 +103,12 @@ public class Movement : MonoBehaviour
 
     void rbDrag()
     {
-        if(IsRayGrounded())
+        if(IsGrounded())
         {
             speedMultiplier = 10f;
             rb.linearDamping = GroundDrag;
         } 
-        else if (!IsRayGrounded())
+        else if (!IsGrounded())
         {
             speedMultiplier = 1f;
             rb.linearDamping = AirDrag;
@@ -99,19 +125,26 @@ public class Movement : MonoBehaviour
 
     private void Debugs()
     {
-        Debug.DrawRay(transform.position, Vector3.down * GroundRayLength, Color.green);
 
-        if(IsRayGrounded())
+        Debug.DrawRay(transform.position, Vector3.down * GroundRayLength, Color.cyan);
+        if(IsGrounded() && !OnSlope())
         {
-            Debug.Log("Is Grounded by Raycast");
+            Debug.Log("Is Grounded");
+        }
+        if(IsGrounded() && OnSlope())
+        {
+            Debug.Log("On Slope");
         }
     }
 
-    
-
-    private bool IsRayGrounded()
+    void OnDrawGizmos()
     {
-        return Physics.Raycast(transform.position, Vector3.down, GroundRayLength);
+        Gizmos.DrawSphere(transform.position - new Vector3(0,0.75f, 0), JumpGizmoRad);
+    }
+
+    private bool IsGrounded()
+    {
+        return Physics.CheckSphere(transform.position - new Vector3(0, 0.75f, 0),JumpGizmoRad, groundLayer);
     }
 
 }
