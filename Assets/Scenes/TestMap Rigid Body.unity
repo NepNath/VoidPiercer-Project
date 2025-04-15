@@ -11438,10 +11438,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1970388877}
   - component: {fileID: 1970388878}
+  - component: {fileID: 1970388884}
   - component: {fileID: 1970388879}
   - component: {fileID: 1970388881}
   - component: {fileID: 1970388882}
   - component: {fileID: 1970388883}
+  - component: {fileID: 1970388885}
   m_Layer: 0
   m_Name: PlayerComponent
   m_TagString: Untagged
@@ -11511,7 +11513,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  moveSpeed: 8
+  moveSpeed: 13
   speedMultiplier: 10
   airMultiplier: 0.4
   maxSpeed: 7
@@ -11569,6 +11571,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orientation: {fileID: 1443613998}
   wallDistance: 0.7
+  WallFront: 0
+  WallBack: 0
+  WallLeft: 0
+  WallRight: 0
+--- !u!114 &1970388884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970388876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6af697cc2b0d8ca4ab5887233f22d7df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  move: {fileID: 1970388879}
+  wall: {fileID: 1970388885}
+  showConsoleInfo: 1
+  showRaycasts: 1
+  showGizmos: 1
+--- !u!114 &1970388885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970388876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9238790178c6d8b4fb838b1f6021bb1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orientation: {fileID: 0}
+  minimumHeight: 0
+  wallDistance: 0
+  wallCheckRadius: 0
+  wallLeft: 0
+  wallRight: 0
+  wallFront: 0
+  wallBack: 0
 --- !u!1 &2028459831
 GameObject:
   m_ObjectHideFlags: 0

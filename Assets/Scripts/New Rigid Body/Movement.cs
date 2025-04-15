@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 public class Movement : MonoBehaviour
 {
     [Header("References")]
+    WallActions wall;
     Rigidbody rb;
     [SerializeField] Transform cam;
     [SerializeField] Transform orientaiton;
@@ -25,8 +26,8 @@ public class Movement : MonoBehaviour
 
     [Header("Jump")]
     public float JumpForce = 10f;
-    [SerializeField] float GroundRayLength;
-    [SerializeField] float JumpGizmoRad;
+    public float GroundRayLength;
+    public float JumpGizmoRad;
 
     [Header("Slope")]
     RaycastHit SlopeHit;
@@ -38,6 +39,7 @@ public class Movement : MonoBehaviour
 
     void Start()
     {
+        wall = GetComponent<WallActions>();
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
@@ -45,7 +47,6 @@ public class Movement : MonoBehaviour
     private void Update()
     {
         Inputs();
-        Debugs();        
         jump();
         rbDrag();
 
@@ -76,7 +77,7 @@ public class Movement : MonoBehaviour
         
     }
 
-    private bool OnSlope()
+    public bool OnSlope()
     {
         if(Physics.Raycast(transform.position, Vector3.down, out SlopeHit, GroundRayLength))
         {
@@ -123,26 +124,7 @@ public class Movement : MonoBehaviour
         moveDirection = orientaiton.forward * verticalMovement + orientaiton.right * horizontalMovement;
     }
 
-    private void Debugs()
-    {
-
-        Debug.DrawRay(transform.position, Vector3.down * GroundRayLength, Color.cyan);
-        if(IsGrounded() && !OnSlope())
-        {
-            Debug.Log("Is Grounded");
-        }
-        if(IsGrounded() && OnSlope())
-        {
-            Debug.Log("On Slope");
-        }
-    }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.DrawSphere(transform.position - new Vector3(0,0.75f, 0), JumpGizmoRad);
-    }
-
-    private bool IsGrounded()
+    public bool IsGrounded()
     {
         return Physics.CheckSphere(transform.position - new Vector3(0, 0.75f, 0),JumpGizmoRad, groundLayer);
     }

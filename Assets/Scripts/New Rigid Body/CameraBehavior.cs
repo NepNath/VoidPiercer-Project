@@ -34,7 +34,6 @@ public class CameraBehavior : MonoBehaviour
 
         PlayerCam.transform.localRotation = Quaternion.Euler(xRotation,yRotation,0);
         Orientation.transform.rotation = Quaternion.Euler(0,yRotation,0);
-        
    }
 
     void CameraMovement()
