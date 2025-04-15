@@ -16,13 +16,15 @@ public class Movement : MonoBehaviour
 
     [Header("Mouvements")]
     [SerializeField] float moveSpeed = 6f;
-    [SerializeField] float speedMultiplier;
+    public float speedMultiplier;
     [SerializeField] float airMultiplier = 0.4f;
+    [SerializeField] float wallSpeedMultiplier = 2f;
     [SerializeField] float maxSpeed = 15f;
 
     [Header("Drags")]
     [SerializeField] float GroundDrag;
     [SerializeField] float AirDrag;
+    [SerializeField] float wallDrag;
 
     [Header("Jump")]
     public float JumpForce = 10f;
@@ -74,6 +76,11 @@ public class Movement : MonoBehaviour
             rb.useGravity = true;
             rb.AddForce(moveDirection.normalized * moveSpeed * speedMultiplier * airMultiplier, ForceMode.Acceleration);
         }
+        if(wall.isWallRunning && !IsGrounded())
+        {
+            rb.AddForce(moveDirection.normalized * moveSpeed * speedMultiplier * wallSpeedMultiplier, ForceMode.Acceleration);
+        }
+        
         
     }
 
@@ -109,6 +116,11 @@ public class Movement : MonoBehaviour
             speedMultiplier = 10f;
             rb.linearDamping = GroundDrag;
         } 
+        else if(wall.isWallRunning)
+        {
+            speedMultiplier = wallSpeedMultiplier;
+            rb.linearDamping = wallDrag;
+        }
         else if (!IsGrounded())
         {
             speedMultiplier = 1f;

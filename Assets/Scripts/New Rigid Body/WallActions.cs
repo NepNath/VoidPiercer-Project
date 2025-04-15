@@ -1,5 +1,3 @@
-using JetBrains.Rider.Unity.Editor;
-using UnityEditor.UIElements;
 using UnityEngine;
 
 public class WallActions : MonoBehaviour
@@ -7,17 +5,25 @@ public class WallActions : MonoBehaviour
     [Header("References")]
     [SerializeField] Transform orientation;
     Rigidbody rb;
+    Movement move;
 
-    [Header("WallRun")]
+    RaycastHit LeftWallHit;
+    RaycastHit RightWallHit;
+
+    [Header("WallRun & Jump")]
+    public bool isWallRunning;
     [SerializeField] float wallRunGravity;
     public float minimumHeight;
+    public float wallJumpForce;
     [SerializeField] float wallDistance;
     public float wallCheckRadius;
+
     [HideInInspector] public bool wallLeft, wallRight, wallFront, wallBack = false;
     [SerializeField] LayerMask wallTag;
 
     void Start()
     {
+        move = GetComponent<Movement>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -29,45 +35,68 @@ public class WallActions : MonoBehaviour
         {
             if(wallLeft)
             {
+                wallRun();
                 Debug.Log("Wall Running Left");
             }
             else if(wallRight)
             {
+                wallRun();
                 Debug.Log("Wall Running Right");
+            }
+            else
+            {
+                stopWallRun();
             }
         }
     }
 
-    bool canWallRun()
+    public bool canWallRun()
     {
         return !Physics.Raycast(transform.position, Vector3.down, minimumHeight );
     }
 
     void checkWall()
     {
-        wallLeft = Physics.CheckSphere(transform.position - orientation.right, wallCheckRadius, wallTag);
-        wallRight = Physics.CheckSphere(transform.position + orientation.right, wallCheckRadius, wallTag);
+        
+        wallLeft = Physics.SphereCast(transform.position, wallCheckRadius, -orientation.right, out LeftWallHit, wallDistance, wallTag);
+        wallRight = Physics.SphereCast(transform.position,  wallCheckRadius, orientation.right, out RightWallHit, wallDistance, wallTag);
+    }
+
+    void wallGrip()
+    {
+        
     }
 
     void wallRun()
     {
         rb.useGravity = false;
+        isWallRunning = true;
 
         rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
+
             if(wallLeft)
             {
-                
+                Vector3 wallRunDirection = transform.up + LeftWallHit.normal;
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+                rb.AddForce(wallRunDirection * wallJumpForce, ForceMode.Impulse);   
             }
+
             if(wallRight)
             {
-
+                Vector3 wallRunDirection = transform.up + RightWallHit.normal;
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+                rb.AddForce(wallRunDirection * wallJumpForce, ForceMode.Impulse);   
             }
 
         }
+    }
 
-
+    void stopWallRun()
+    {
+        isWallRunning = false;
+        rb.useGravity = true;
     }
 }

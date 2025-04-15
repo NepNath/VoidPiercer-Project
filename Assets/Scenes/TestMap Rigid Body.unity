@@ -1571,7 +1571,7 @@ GameObject:
   - component: {fileID: 281074693}
   - component: {fileID: 281074692}
   - component: {fileID: 281074691}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3938,7 +3938,7 @@ GameObject:
   - component: {fileID: 610875882}
   - component: {fileID: 610875881}
   - component: {fileID: 610875880}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12819,9 +12819,9 @@ GameObject:
   - component: {fileID: 1970388878}
   - component: {fileID: 1970388884}
   - component: {fileID: 1970388879}
+  - component: {fileID: 1970388885}
   - component: {fileID: 1970388881}
   - component: {fileID: 1970388882}
-  - component: {fileID: 1970388885}
   m_Layer: 0
   m_Name: PlayerComponent
   m_TagString: Untagged
@@ -12894,10 +12894,12 @@ MonoBehaviour:
   moveSpeed: 13
   speedMultiplier: 10
   airMultiplier: 0.4
+  wallSpeedMultiplier: 3.5
   maxSpeed: 7
   GroundDrag: 10
   AirDrag: 1
-  JumpForce: 15
+  wallDrag: 15
+  JumpForce: 23
   GroundRayLength: 2
   JumpGizmoRad: 0.35
 --- !u!114 &1970388881
@@ -12964,10 +12966,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orientation: {fileID: 1443613998}
-  wallRunGravity: 0
+  isWallRunning: 0
+  wallRunGravity: -2
   minimumHeight: 1.5
-  wallDistance: 0
-  wallCheckRadius: 0.2
+  wallJumpForce: 18
+  wallDistance: 0.5
+  wallCheckRadius: 0.1
   wallLeft: 0
   wallRight: 0
   wallFront: 0

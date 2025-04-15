@@ -33,9 +33,9 @@ public class ConsoleDebugs : MonoBehaviour
         {
             Gizmos.DrawSphere(transform.position - new Vector3(0,0.75f, 0), move.JumpGizmoRad);
             Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(transform.position - orientation.right * 0.5f, wall.wallCheckRadius * 1.75f);
+            Gizmos.DrawSphere(transform.position - orientation.right * 0.5f, wall.wallCheckRadius);
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(transform.position + orientation.right * 0.5f, wall.wallCheckRadius * 1.75f);
+            Gizmos.DrawSphere(transform.position + orientation.right * 0.5f, wall.wallCheckRadius);
         }
     }
 
