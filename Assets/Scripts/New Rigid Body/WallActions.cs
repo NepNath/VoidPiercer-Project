@@ -17,6 +17,7 @@ public class WallActions : MonoBehaviour
     public bool isWallRunning;
     public bool isClimbing;
     [SerializeField] float wallRunGravity;
+    [SerializeField] float wallAttraction;
     public float minimumHeight;
     public float wallJumpForce;
     [SerializeField] float wallDistance;
@@ -47,6 +48,14 @@ public class WallActions : MonoBehaviour
             {
                 wallRun();
                 Debug.Log("Wall Running Right");
+            }
+            else if(wallFront)
+            {
+                wallRun(); 
+            }
+            else if(wallBack)
+            {
+                wallRun();
             }
             else
             {
@@ -86,6 +95,26 @@ public class WallActions : MonoBehaviour
         isWallRunning = true;
 
         rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
+        if(wallLeft)
+        {
+            Vector3 wallRunDirection =  LeftWallHit.normal;
+            rb.AddForce(wallRunDirection * wallAttraction, ForceMode.Force);
+        }
+        else if(wallRight)
+        {
+            Vector3 wallRunDirection =  RightWallHit.normal;
+            rb.AddForce(wallRunDirection * wallAttraction, ForceMode.Force);
+        }
+        else if(wallBack)
+        {
+            Vector3 wallRunDirection =  BackWallHit.normal;
+            rb.AddForce(wallRunDirection * wallAttraction, ForceMode.Force);
+        }
+        else if (wallFront)
+        {
+            Vector3 wallRunDirection =  FrontWallHit.normal;
+            rb.AddForce(wallRunDirection * wallAttraction, ForceMode.Force);
+        }
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
