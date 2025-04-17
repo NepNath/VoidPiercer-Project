@@ -37,7 +37,7 @@ public class Movement : MonoBehaviour
 
     private float horizontalMovement;
     private float verticalMovement;
-    private Vector3 moveDirection;
+    public Vector3 moveDirection;
 
     void Start()
     {
@@ -109,7 +109,7 @@ public class Movement : MonoBehaviour
         }
     }
 
-    void rbDrag()
+    public void rbDrag()
     {
         if(IsGrounded())
         {
