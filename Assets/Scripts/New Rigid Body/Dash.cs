@@ -16,7 +16,7 @@ public class Dash : MonoBehaviour
     public bool IsDashing;
     public bool canDash;
     [SerializeField] float dashCooldown;
-    [SerializeField] int dashCount;
+    public int dashCount;
     public int maxDash;
     [SerializeField] float DashReSec;
     [SerializeField] bool Recharging;

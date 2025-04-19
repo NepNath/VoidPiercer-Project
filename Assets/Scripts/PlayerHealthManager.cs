@@ -19,6 +19,12 @@ public class PlayerHealthManager : MonoBehaviour
    private Coroutine HealCodroutine;
     // -------- References --------
 
+
+    void Start()
+    {
+        playerHealth = maxHealth;
+    }
+
     private void Update()
     {
         if(playerHealth > maxHealth)

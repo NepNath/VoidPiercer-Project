@@ -14,7 +14,8 @@ public class WallActions : MonoBehaviour
     
 
     [Header("WallRun & Jump")]
-    [SerializeField] int wallJumpCount;
+    
+    public int wallJumpCount;
     public int maxWallJump;
     public bool isWallRunning;
     public bool isClimbing;

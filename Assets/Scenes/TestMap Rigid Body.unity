@@ -2748,7 +2748,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PlayerHealth
+  m_text: PlayerHealth - not assigned
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5913,7 +5913,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Dash
+  m_text: Dash - not assigned
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6818,7 +6818,7 @@ GameObject:
   - component: {fileID: 878712787}
   - component: {fileID: 878712786}
   m_Layer: 5
-  m_Name: FOVtext
+  m_Name: drag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6863,7 +6863,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: FOV - Broken
+  m_text: drag - not assigned
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -9450,7 +9450,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Velocity
+  m_text: Velocity - not assigned
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -9694,7 +9694,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Jump
+  m_text: Jump - not assigned
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -14184,10 +14184,12 @@ GameObject:
   - component: {fileID: 1970388877}
   - component: {fileID: 1970388878}
   - component: {fileID: 1970388884}
+  - component: {fileID: 1970388886}
   - component: {fileID: 1970388879}
   - component: {fileID: 1970388885}
   - component: {fileID: 1970388881}
   - component: {fileID: 1970388882}
+  - component: {fileID: 1970388887}
   m_Layer: 0
   m_Name: PlayerComponent
   m_TagString: Untagged
@@ -14287,10 +14289,10 @@ MonoBehaviour:
   DashForce: 35
   IsDashing: 0
   canDash: 0
-  dashCooldown: 0.5
+  dashCooldown: 0.35
   dashCount: 0
   maxDash: 3
-  DashReSec: 1
+  DashReSec: 1.25
   Recharging: 0
 --- !u!114 &1970388882
 MonoBehaviour:
@@ -14355,6 +14357,47 @@ MonoBehaviour:
   wallTag:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &1970388886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970388876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a7b95732bbcf2b439d844e12c9dd218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  move: {fileID: 0}
+  wall: {fileID: 0}
+  dash: {fileID: 0}
+  CD: {fileID: 0}
+  health: {fileID: 0}
+  Velocity: {fileID: 1230032577}
+  Health: {fileID: 451876698}
+  DashCt: {fileID: 672262402}
+  WallJ: {fileID: 1252418269}
+  drag: {fileID: 878712786}
+--- !u!114 &1970388887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970388876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3d1c17e64f88044ba706cff05ae3e08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  playerHealth: 0
+  DamageCoroutineSeconds: 1
+  HealingCoroutineSeconds: 0.1
+  IsTakingDamages: 0
+  IsBeingHealed: 0
 --- !u!1 &1988352359
 GameObject:
   m_ObjectHideFlags: 0
