@@ -16,6 +16,10 @@ public class Dash : MonoBehaviour
     public bool IsDashing;
     public bool canDash;
     [SerializeField] float dashCooldown;
+    [SerializeField] int dashCount;
+    public int maxDash;
+    [SerializeField] float DashReSec;
+    [SerializeField] bool Recharging;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,14 +27,21 @@ public class Dash : MonoBehaviour
         move = GetComponent<Movement>();
         rb = GetComponent<Rigidbody>();
         canDash = true;
+        dashCount = maxDash;
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.LeftShift) && !IsDashing)
+        if(Input.GetKeyDown(KeyCode.LeftShift) && !IsDashing && dashCount > 0)
         {
+            dashCount -= 1;
             rb.AddForce(move.moveDirection * DashForce, ForceMode.Impulse);
             StartCoroutine(DashReset());
+        }
+
+         if(dashCount < 3 && !Recharging)
+        {
+            StartCoroutine(dashRecharge());
         }
     }
 
@@ -44,4 +55,20 @@ public class Dash : MonoBehaviour
         IsDashing = false;
         canDash = true;
     }
+
+    IEnumerator dashRecharge()
+    {
+        Recharging = true;
+        while(dashCount < 3)
+        {
+            yield return new WaitForSeconds(DashReSec);
+            if(dashCount < 3)
+            {
+                dashCount++;
+            }
+        }
+
+        Recharging = false;
+    }
+
 }

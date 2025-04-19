@@ -14,6 +14,8 @@ public class WallActions : MonoBehaviour
     
 
     [Header("WallRun & Jump")]
+    [SerializeField] int wallJumpCount;
+    public int maxWallJump;
     public bool isWallRunning;
     public bool isClimbing;
     [SerializeField] float wallRunGravity;
@@ -30,12 +32,14 @@ public class WallActions : MonoBehaviour
     {
         move = GetComponent<Movement>();
         rb = GetComponent<Rigidbody>();
+        wallJumpCount = maxWallJump;
     }
 
     void Update()
     {
         checkWall();
         wallGrip();
+        wallJumpRecharge();
 
         if (canWallRun())
         {
@@ -116,11 +120,12 @@ public class WallActions : MonoBehaviour
             rb.AddForce(wallRunDirection * wallAttraction, ForceMode.Force);
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space) && wallJumpCount > 0)
         {
 
             if(wallLeft)
             {
+                wallJumpCount --;
                 Vector3 wallRunDirection = transform.up + LeftWallHit.normal;
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
                 rb.AddForce(wallRunDirection * wallJumpForce, ForceMode.Impulse);   
@@ -128,12 +133,14 @@ public class WallActions : MonoBehaviour
 
             if(wallRight)
             {
+                wallJumpCount --;
                 Vector3 wallRunDirection = transform.up + RightWallHit.normal;
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
                 rb.AddForce(wallRunDirection * wallJumpForce, ForceMode.Impulse);   
             }
             if(wallFront)
             {
+                wallJumpCount --;
                 Debug.Log("front jump");
                 Vector3 wallRunDirection = transform.up + FrontWallHit.normal;
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
@@ -141,6 +148,7 @@ public class WallActions : MonoBehaviour
             }
             if(wallBack)
             {
+                wallJumpCount --;
                 Debug.Log("back jump");
                 Vector3 wallRunDirection = transform.up + BackWallHit.normal;
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
@@ -154,5 +162,13 @@ public class WallActions : MonoBehaviour
     {
         isWallRunning = false;
         rb.useGravity = true;
+    }
+
+    void wallJumpRecharge()
+    {
+        if(move.IsGrounded())
+        {
+            wallJumpCount = maxWallJump;
+        }
     }
 }
