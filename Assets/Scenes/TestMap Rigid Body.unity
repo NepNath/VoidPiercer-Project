@@ -14100,9 +14100,11 @@ MonoBehaviour:
   GroundDrag: 10
   AirDrag: 1
   wallDrag: 10
+  dashDrag: 3
   JumpForce: 23
   GroundRayLength: 2
   JumpGizmoRad: 0.35
+  moveDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &1970388881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14115,12 +14117,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9c49a1936ff2fb45b685d11d6e16482, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Movement: {fileID: 1970388879}
-  Rigidbody: {fileID: 1970388878}
-  DashForce: 100
-  DashCooldown: 0.25
-  dashDuration: 3
+  move: {fileID: 0}
+  rb: {fileID: 0}
+  DashForce: 35
+  IsDashing: 0
   canDash: 0
+  dashCooldown: 1
 --- !u!114 &1970388882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14170,10 +14172,11 @@ MonoBehaviour:
   isWallRunning: 0
   isClimbing: 0
   wallRunGravity: -2
+  wallAttraction: -10
   minimumHeight: 1.5
   wallJumpForce: 18
   wallDistance: 0.5
-  wallCheckRadius: 0.2
+  wallCheckRadius: 0.15
   wallLeft: 0
   wallRight: 0
   wallFront: 0

@@ -10,6 +10,7 @@ public class Movement : MonoBehaviour
     [Header("References")]
     WallActions wall;
     Rigidbody rb;
+    Dash dash;
     [SerializeField] Transform cam;
     [SerializeField] Transform orientaiton;
     [SerializeField] LayerMask groundLayer;
@@ -25,6 +26,7 @@ public class Movement : MonoBehaviour
     [SerializeField] float GroundDrag;
     [SerializeField] float AirDrag;
     [SerializeField] float wallDrag;
+    [SerializeField] float dashDrag;
 
     [Header("Jump")]
     public float JumpForce = 10f;
@@ -43,6 +45,7 @@ public class Movement : MonoBehaviour
     {
         wall = GetComponent<WallActions>();
         rb = GetComponent<Rigidbody>();
+        dash = GetComponent<Dash>();
         rb.freezeRotation = true;
     }
 
@@ -116,6 +119,10 @@ public class Movement : MonoBehaviour
             speedMultiplier = 10f;
             rb.linearDamping = GroundDrag;
         } 
+        else if(dash.IsDashing)
+        {
+            rb.linearDamping = dashDrag;
+        }
         else if(wall.isWallRunning)
         {
             speedMultiplier = wallSpeedMultiplier;
