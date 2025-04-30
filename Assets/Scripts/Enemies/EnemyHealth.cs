@@ -2,29 +2,44 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-
     [SerializeField] float maxHealth = 100f;
-    [SerializeField] float health;
+    [SerializeField] float currentHealth;
+    [SerializeField] HealthBar healthBar; // Ajout de SerializeField
 
-    HealthBar healthBar;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        health = maxHealth;
-        healthBar = GetComponentInChildren<HealthBar>();
-
-
+        currentHealth = maxHealth;
+        if (healthBar == null)
+        {
+            healthBar = GetComponentInChildren<HealthBar>();
+            if (healthBar == null)
+            {
+                Debug.LogWarning("HealthBar component not found on " + gameObject.name);
+            }
+        }
     }
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        healthBar.UpdateHealthBar(health, maxHealth);
+        if(currentHealth < 0)
+        {
+            currentHealth = 0f;
+        }
+
+        if(currentHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+
+    public void takeDamage(float damage)
+    {
+        currentHealth -= damage;
+        if (healthBar != null) // Vérification de null avant d'utiliser healthBar
+        {
+            healthBar.UpdateHealthBar(currentHealth / maxHealth);
+        }
+        Debug.Log($"Enemy took {damage} damage. Current health: {currentHealth}");
     }
 }

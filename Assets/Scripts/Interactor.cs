@@ -7,7 +7,7 @@ public class Interactor : MonoBehaviour
 {
    public Transform Source;
    public float Range;
-   public KeyCode InteractKey = KeyCode.E;
+   public KeyCode InteractKey = KeyCode.E;  
 
 
     private void Start()
@@ -31,9 +31,7 @@ public class Interactor : MonoBehaviour
                 }
             }
         }
+    }
 
-
-    } // end of Update()
-
-}   //end of class
+}
  

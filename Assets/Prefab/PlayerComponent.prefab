@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2236481902484118484}
   - component: {fileID: 2188575043878403458}
   - component: {fileID: 8489715426420726566}
+  - component: {fileID: 4122021454011922790}
   - component: {fileID: 5640594781905361782}
   - component: {fileID: 5833843178792413029}
   - component: {fileID: 4515723938728055287}
@@ -191,6 +192,22 @@ MonoBehaviour:
   maxDash: 3
   DashReSec: 1.25
   Recharging: 0
+--- !u!114 &4122021454011922790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22265454261365864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a56e1afe6a5ac0499f3001a673e585f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 25
+  playerLook: {fileID: 0}
+  range: 2
+  meleKey: 102
 --- !u!114 &5640594781905361782
 MonoBehaviour:
   m_ObjectHideFlags: 0
