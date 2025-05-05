@@ -8,6 +8,7 @@ TagManager:
   - DealsDamage
   - Wall
   - Enemy
+  - bullet
   layers:
   - Default
   - TransparentFX
