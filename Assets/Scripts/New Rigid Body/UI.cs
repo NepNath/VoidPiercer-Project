@@ -3,19 +3,20 @@ using TMPro;
 
 public class UI : MonoBehaviour
 {
-   public Rigidbody rb;
-   public Movement move;
-   public WallActions wall;
-   public Dash dash;
-   public ConsoleDebugs CD;
-   public PlayerHealthManager health;
+    public Rigidbody rb;
+    public Movement move;
+    public WallActions wall;
+    public Dash dash;
+    public ConsoleDebugs CD;
+    public PlayerHealthManager health;
 
-   [Header("Texts")]
+    [Header("Texts")]
     [SerializeField] TextMeshProUGUI Velocity;
     [SerializeField] TextMeshProUGUI Health;
     [SerializeField] TextMeshProUGUI DashCt;
     [SerializeField] TextMeshProUGUI WallJ;
     [SerializeField] TextMeshProUGUI drag;
+
 
 
     void Start()

@@ -34,7 +34,6 @@ public class Mele : MonoBehaviour
                     {
                         Debug.Log("Error while gathering enemy health script");
                     }
-
                 }
             }
         }

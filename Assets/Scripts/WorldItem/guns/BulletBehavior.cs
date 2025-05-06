@@ -12,11 +12,11 @@ public class BulletBehavior : MonoBehaviour
         Destroy(gameObject, lifeTime); // Détruit la balle après un certain temps
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if(other.CompareTag("Enemy"))
+        if(collision.gameObject.CompareTag("Enemy"))
         {
-            EnemyHealth enemyHealth = other.GetComponent<EnemyHealth>();
+            EnemyHealth enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
             if(enemyHealth != null)
             {
                 enemyHealth.takeDamage(damage);
