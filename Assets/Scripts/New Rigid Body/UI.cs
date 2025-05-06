@@ -19,7 +19,7 @@ public class UI : MonoBehaviour
 
 
 
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
         move = GetComponent<Movement>();

@@ -10,6 +10,8 @@ interface IInteractable
 public class CameraBehavior : MonoBehaviour
 {
     [Header("CameraVariables")]
+    [SerializeField] GameObject Menu;
+    private bool isOpenMenu;
     public Transform PlayerCam;
     public Transform Orientation;
     private float mouseY;
@@ -30,7 +32,11 @@ public class CameraBehavior : MonoBehaviour
 
     void Update()
    {
-        CameraMovement();
+        if(!isOpenMenu)
+        {
+            CameraMovement();
+        }
+        OpenMenu();
 
         PlayerCam.transform.localRotation = Quaternion.Euler(xRotation,yRotation,0);
         Orientation.transform.rotation = Quaternion.Euler(0,yRotation,0);
@@ -47,4 +53,25 @@ public class CameraBehavior : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
     }
 
+    void OpenMenu()
+    {
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            isOpenMenu = !isOpenMenu;
+        }
+
+        if(isOpenMenu)
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+            Menu.SetActive(true);
+
+        }else{
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            Menu.SetActive(false);
+        }
+    }
 }
