@@ -16,8 +16,8 @@ public class MenuCamera : MonoBehaviour
 
     void Start()
     {
-
-        
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
     }
 
     void Update()

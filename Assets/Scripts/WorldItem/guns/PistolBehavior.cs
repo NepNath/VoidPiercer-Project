@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class PistolBehavior : MonoBehaviour
@@ -11,6 +12,10 @@ public class PistolBehavior : MonoBehaviour
     [SerializeField] float bulletForce;
     [SerializeField] private GameObject bulletPrefab; // Renommé pour plus de clarté
     [SerializeField] private Transform spawnPoint; // Point de spawn des balles
+
+    [Header("Impacts")]
+    public GameObject NormalImpact;
+    public GameObject EnemyImpact;
 
     [Header("Gun Settings")] // Optionnel : ajoutez des paramètres supplémentaires
     [SerializeField] private float fireRate = 0.5f;
@@ -32,29 +37,24 @@ public class PistolBehavior : MonoBehaviour
 
     private void Fire()
     {
-        // Utilise le spawnPoint si disponible, sinon utilise la position de l'arme
-        // Vector3 spawnPos = spawnPoint != null ? spawnPoint.position : transform.position;
-        
-        // GameObject bullet = Instantiate(bulletPrefab, spawnPos, transform.rotation);
-        //  Quaternion spawnRotation = playerCamera != null ? 
-        //     playerCamera.transform.rotation : 
-        //     transform.rotation;
-        // Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
-        // if (bulletRb != null)
-        // {
-        //     bulletRb.AddForce(spawnRotation * Vector3.forward * bulletForce, ForceMode.Impulse);
-        // }
         
         Ray aimDirection = new Ray(Camera.position, Camera.forward);
 
         if(Physics.Raycast(aimDirection, out RaycastHit aimHitDirection))
         {
-            if(aimHitDirection.collider.CompareTag("Enemy"))
-            {
-                EnemyHealth enemyHealth = aimHitDirection.collider.GetComponent<EnemyHealth>();
-                enemyHealth.takeDamage(pistolDamage);
-                Debug.DrawRay(Camera.position, Camera.forward, Color.red);
-            }
+        if(aimHitDirection.collider.CompareTag("Enemy"))
+        {
+            EnemyHealth enemyHealth = aimHitDirection.collider.GetComponent<EnemyHealth>();
+            enemyHealth.takeDamage(pistolDamage);
+            Debug.DrawRay(Camera.position, Camera.forward, Color.red);
+            Instantiate(EnemyImpact, aimHitDirection.point, Quaternion.LookRotation(aimHitDirection.normal));
+
+        }
+        else
+        {
+            Debug.Log(aimHitDirection.transform.name);
+            Instantiate(NormalImpact, aimHitDirection.point, Quaternion.LookRotation(aimHitDirection.normal));
+        }
         }
     }
 
