@@ -160,16 +160,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1068446536}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b1eecb3fb33b1f418b4110c9be76e7a, type: 3}
+  m_Script: {fileID: 11500000, guid: ff0479e136b7fa249adcffe070d87d62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   roomPrefabs:
   - {fileID: 6703297898248410983, guid: 26a8c2fc5b8cb2245a7780eb5d25a8a8, type: 3}
   - {fileID: 8502022733398562724, guid: a47e0befdc22a534582d64030813fd13, type: 3}
-  - {fileID: 2133653108151344180, guid: 76a763a7949bba24695a69952ad7778e, type: 3}
   - {fileID: 422345943399125190, guid: f1648e3a0167e4649a9ae4c3f28a64b3, type: 3}
+  - {fileID: 2133653108151344180, guid: 76a763a7949bba24695a69952ad7778e, type: 3}
   corridorPrefab: {fileID: 3925956197003640122, guid: 393cc1b4718229947a800009d55fffe3, type: 3}
-  maxRooms: 80
+  roomCount: 28
+  gridSpacing: {x: 30, y: 30}
 --- !u!1 &1113450074
 GameObject:
   m_ObjectHideFlags: 0

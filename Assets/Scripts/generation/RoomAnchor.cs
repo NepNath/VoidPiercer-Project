@@ -22,8 +22,8 @@ public class RoomAnchor : MonoBehaviour
         {
             AnchorDirection.North => Vector3.forward,
             AnchorDirection.South => Vector3.back,
-            AnchorDirection.East => Vector3.right,
-            AnchorDirection.West => Vector3.left,
+            AnchorDirection.East  => Vector3.right,
+            AnchorDirection.West  => Vector3.left,
             _ => Vector3.forward
         };
 
