@@ -13,6 +13,6 @@ public class Billboarding : MonoBehaviour
 
     void Update()
     {
-        transform.LookAt(transform.position + -cam.forward);
+        transform.LookAt(transform.position + cam.forward);
     }
 }

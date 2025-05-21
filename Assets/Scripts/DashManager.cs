@@ -1,10 +1,6 @@
 using System.Collections;
-using System.Net.Mail;
-using Unity.VisualScripting;
 using UnityEngine;
 using TMPro;
-using UnityEditor.ShaderGraph.Drawing.Colors;
-
 public class DashManager : MonoBehaviour
 {
     [Header("Refecrences")]
