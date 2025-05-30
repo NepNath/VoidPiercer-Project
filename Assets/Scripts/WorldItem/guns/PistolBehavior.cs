@@ -1,23 +1,26 @@
 
+using System.Collections;
 using UnityEngine;
 
 public class PistolBehavior : MonoBehaviour
 {
     [Header("Input Settings")]
     [SerializeField] Transform Camera;
-    [SerializeField] private KeyCode fireKey = KeyCode.Mouse0; // Permet de modifier la touche dans l'inspector
+    [SerializeField] private KeyCode fireKey = KeyCode.Mouse0; 
 
     [Header("Bullet Settings")]
     [SerializeField] float pistolDamage;
     [SerializeField] float bulletForce;
-    [SerializeField] private GameObject bulletPrefab; // Renommé pour plus de clarté
-    [SerializeField] private Transform spawnPoint; // Point de spawn des balles
+    [SerializeField] private GameObject bulletPrefab; 
+    [SerializeField] private Transform spawnPoint; 
 
-    [Header("Impacts")]
+    [Header("Impacts & effects")]
     public GameObject NormalImpact;
     public GameObject EnemyImpact;
+    [SerializeField] private GameObject BulletTrailPrefab;
+    [SerializeField] private float BulletSpeed;
 
-    [Header("Gun Settings")] // Optionnel : ajoutez des paramètres supplémentaires
+    [Header("Gun Settings")] 
     [SerializeField] private float fireRate = 0.5f;
     private float nextTimeToFire = 0f;
 
@@ -37,24 +40,44 @@ public class PistolBehavior : MonoBehaviour
 
     private void Fire()
     {
-        
+
         Ray aimDirection = new Ray(Camera.position, Camera.forward);
 
-        if(Physics.Raycast(aimDirection, out RaycastHit aimHitDirection))
+        if (Physics.Raycast(aimDirection, out RaycastHit aimHitDirection))
         {
-        if(aimHitDirection.collider.CompareTag("Enemy"))
-        {
-            EnemyHealth enemyHealth = aimHitDirection.collider.GetComponent<EnemyHealth>();
-            enemyHealth.takeDamage(pistolDamage);
-            Debug.DrawRay(Camera.position, Camera.forward, Color.red);
-            Instantiate(EnemyImpact, aimHitDirection.point, Quaternion.LookRotation(aimHitDirection.normal));
+            StartCoroutine(SpawnBulletTrail(spawnPoint.position, aimHitDirection));
+            if (aimHitDirection.collider.CompareTag("Enemy"))
+            {
+                EnemyHealth enemyHealth = aimHitDirection.collider.GetComponent<EnemyHealth>();
+                enemyHealth.takeDamage(pistolDamage);
+                Debug.DrawRay(Camera.position, Camera.forward, Color.red);
+                Instantiate(EnemyImpact, aimHitDirection.point, Quaternion.LookRotation(aimHitDirection.normal));
 
+            }
+            else
+            {
+                Debug.Log(aimHitDirection.transform.name);
+                Instantiate(NormalImpact, aimHitDirection.point, Quaternion.LookRotation(aimHitDirection.normal));
+            }
         }
-        else
+
+        IEnumerator SpawnBulletTrail(Vector3 startPoint, RaycastHit hit)
         {
-            Debug.Log(aimHitDirection.transform.name);
-            Instantiate(NormalImpact, aimHitDirection.point, Quaternion.LookRotation(aimHitDirection.normal));
-        }
+            Vector3 endPoint = hit.point;
+            GameObject trail = Instantiate(BulletTrailPrefab, startPoint, Quaternion.identity);
+            float Distance = Vector3.Distance(startPoint, endPoint);
+            float time = 0f;
+            float Duration = Distance / BulletSpeed;
+
+            while (time < Duration)
+            {
+                time += Time.deltaTime;
+                trail.transform.position = Vector3.Lerp(startPoint, endPoint, time / Duration);
+                yield return null;
+            }
+
+            trail.transform.position = endPoint;
+            Destroy(trail, 0.5f);
         }
     }
 

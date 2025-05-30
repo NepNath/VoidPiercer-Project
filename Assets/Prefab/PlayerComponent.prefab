@@ -153,6 +153,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   orientation: {fileID: 891590919924833443}
+  Camera: {fileID: 0}
+  fov: 90
+  wallRunFov: 110
+  wallRunFovTime: 20
+  camTilt: 15
+  camTiltTime: 20
   wallJumpCount: 0
   maxWallJump: 3
   isWallRunning: 0
@@ -220,6 +226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8709f766794c49549b9094ba5401a97b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wall: {fileID: 0}
+  Menu: {fileID: 0}
   PlayerCam: {fileID: 0}
   Orientation: {fileID: 891590919924833443}
   sensX: 2
@@ -1319,7 +1327,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8e72a2bd818e10646b7f481a28e7d7a7, type: 2}
+  - {fileID: 2100000, guid: e18ded4b611aa8f4a9f0f261d2f29537, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

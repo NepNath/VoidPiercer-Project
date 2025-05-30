@@ -236,6 +236,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: GunHolder
       objectReference: {fileID: 0}
+    - target: {fileID: 3979362064943467209, guid: b14faa69c91990743bcec130ad5b1d50, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6618227874062137887, guid: b14faa69c91990743bcec130ad5b1d50, type: 3}
+      propertyPath: BulletSpeed
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 6618227874062137887, guid: b14faa69c91990743bcec130ad5b1d50, type: 3}
+      propertyPath: BulletTrailPrefab
+      value: 
+      objectReference: {fileID: 3427362782984877688, guid: 8002ca2abc36fe44b98540ed04465c0f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

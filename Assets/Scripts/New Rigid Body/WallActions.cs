@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.WSA;
 
 public class WallActions : MonoBehaviour
 {
@@ -6,11 +8,21 @@ public class WallActions : MonoBehaviour
     [SerializeField] Transform orientation;
     Rigidbody rb;
     Movement move;
+    [SerializeField] private Camera Camera;
 
     RaycastHit LeftWallHit;
     RaycastHit RightWallHit;
     RaycastHit FrontWallHit;
     RaycastHit BackWallHit;
+
+    [Header("Camera Settings")]
+    [SerializeField] private float fov;
+    [SerializeField] private float wallRunFov;
+    [SerializeField] private float wallRunFovTime;
+    [SerializeField] private float camTilt;
+    [SerializeField] private float camTiltTime;
+
+    public float tilt { get;  private set;}
     
 
     [Header("WallRun & Jump")]
@@ -34,6 +46,7 @@ public class WallActions : MonoBehaviour
         move = GetComponent<Movement>();
         rb = GetComponent<Rigidbody>();
         wallJumpCount = maxWallJump;
+        Camera.fieldOfView = fov;
     }
 
     void Update()
@@ -41,24 +54,14 @@ public class WallActions : MonoBehaviour
         checkWall();
         wallGrip();
         wallJumpRecharge();
+        cameraTilt();
+
+        Camera.fieldOfView = Mathf.Lerp(Camera.fieldOfView, fov, wallRunFovTime * Time.deltaTime);
+
 
         if (canWallRun())
         {
-            if(wallLeft)
-            {
-                wallRun();
-                Debug.Log("Wall Running Left");
-            }
-            else if(wallRight)
-            {
-                wallRun();
-                Debug.Log("Wall Running Right");
-            }
-            else if(wallFront)
-            {
-                wallRun(); 
-            }
-            else if(wallBack)
+            if (wallLeft || wallRight || wallFront || wallBack)
             {
                 wallRun();
             }
@@ -67,6 +70,11 @@ public class WallActions : MonoBehaviour
                 stopWallRun();
             }
         }
+        else
+        {
+            stopWallRun();
+        }
+
     }
 
     public bool canWallRun()
@@ -99,25 +107,30 @@ public class WallActions : MonoBehaviour
         rb.useGravity = false;
         isWallRunning = true;
 
+        Camera.fieldOfView = Mathf.Lerp(Camera.fieldOfView, wallRunFov, wallRunFovTime * Time.deltaTime);
+
         rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
-        if(wallLeft)
+        
+        if (wallLeft)
         {
-            Vector3 wallRunDirection =  LeftWallHit.normal;
+            Vector3 wallRunDirection = LeftWallHit.normal;
             rb.AddForce(wallRunDirection * wallAttraction, ForceMode.Force);
         }
-        else if(wallRight)
+        else if (wallRight)
         {
-            Vector3 wallRunDirection =  RightWallHit.normal;
+            Vector3 wallRunDirection = RightWallHit.normal;
             rb.AddForce(wallRunDirection * wallAttraction, ForceMode.Force);
         }
-        else if(wallBack)
+        else if (wallBack)
         {
-            Vector3 wallRunDirection =  BackWallHit.normal;
+            tilt = Mathf.Lerp(tilt, 0, camTiltTime * Time.deltaTime);
+            Vector3 wallRunDirection = BackWallHit.normal;
             rb.AddForce(wallRunDirection * wallAttraction, ForceMode.Force);
         }
         else if (wallFront)
         {
-            Vector3 wallRunDirection =  FrontWallHit.normal;
+            tilt = Mathf.Lerp(tilt, 0, camTiltTime * Time.deltaTime);
+            Vector3 wallRunDirection = FrontWallHit.normal;
             rb.AddForce(wallRunDirection * wallAttraction, ForceMode.Force);
         }
 
@@ -163,6 +176,24 @@ public class WallActions : MonoBehaviour
     {
         isWallRunning = false;
         rb.useGravity = true;
+        tilt = Mathf.Lerp(tilt, 0, camTiltTime * Time.deltaTime);
+    }
+
+    void cameraTilt()
+    {
+        if (!isWallRunning)
+        {
+            return;
+        }
+        
+        if (wallLeft)
+        {
+            tilt = Mathf.Lerp(tilt, -camTilt, camTiltTime * Time.deltaTime);
+        }
+        else if (wallRight)
+        {
+            tilt = Mathf.Lerp(tilt, camTilt, camTiltTime * Time.deltaTime);
+        }
     }
 
     void wallJumpRecharge()

@@ -16,6 +16,7 @@ public class UI : MonoBehaviour
     [SerializeField] TextMeshProUGUI DashCt;
     [SerializeField] TextMeshProUGUI WallJ;
     [SerializeField] TextMeshProUGUI drag;
+    [SerializeField] TextMeshProUGUI tilt;
 
 
 
@@ -33,32 +34,34 @@ public class UI : MonoBehaviour
     {
 
         //vitesse joueur
-        if(Velocity != null)
+        if (Velocity != null)
         {
             Velocity.text = "Vitesse : " + rb.linearVelocity.magnitude.ToString("F2");
         }
         //linear damping joueur
-        if(drag != null)
+        if (drag != null)
         {
             drag.text = "drag : " + rb.linearDamping.ToString("F2");
         }
         //vie du joueur
-        if(Health != null)
+        if (Health != null)
         {
             Health.text = "Health : " + health.playerHealth;
         }
         //dash restant
-        if(dash != null)
+        if (dash != null)
         {
             DashCt.text = "Dash Left : " + dash.dashCount;
         }
         //Walljump restant
-        if(WallJ != null)
+        if (WallJ != null)
         {
             WallJ.text = "Wall Jump Left : " + wall.wallJumpCount;
         }
-
-
+        if (tilt != null)
+        {
+            tilt.text = "current cam tilt : " + wall.tilt;
+        }
     }
 
 

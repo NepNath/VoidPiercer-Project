@@ -9,6 +9,9 @@ interface IInteractable
 
 public class CameraBehavior : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] WallActions wall;
+
     [Header("CameraVariables")]
     [SerializeField] GameObject Menu;
     private bool isOpenMenu;
@@ -24,22 +27,28 @@ public class CameraBehavior : MonoBehaviour
 
     void Start()
     {
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        
+    }
+
+    void Awake()
+    {
+        wall = GetComponent<WallActions>();
+        PlayerCam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, wall.tilt);
     }
 
     void Update()
-   {
-        if(!isOpenMenu)
+    {
+        if (!isOpenMenu)
         {
             CameraMovement();
         }
         OpenMenu();
 
-        PlayerCam.transform.localRotation = Quaternion.Euler(xRotation,yRotation,0);
-        Orientation.transform.rotation = Quaternion.Euler(0,yRotation,0);
+        PlayerCam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, wall.tilt);
+        Orientation.transform.rotation = Quaternion.Euler(0, yRotation, 0);
+      
+        
    }
 
     void CameraMovement()
