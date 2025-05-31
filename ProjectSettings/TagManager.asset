@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - bullet
   - MenuButton
+  - EffectItems
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PistolBehavior : MonoBehaviour
 {
@@ -20,10 +21,19 @@ public class PistolBehavior : MonoBehaviour
     [Header("Gun Settings")] // Optionnel : ajoutez des paramètres supplémentaires
     [SerializeField] private float fireRate = 0.5f;
     private float nextTimeToFire = 0f;
+    [Header("Player Effects On-Hit")]
+    public PlayerEffects playerEffects;
+    private List<StatusEffect> effects;
+
+    void Start()
+    {
+        effects = playerEffects.getActiveEffects();
+    }
 
     private void Update()
     {
         HandleShooting();
+        effects = playerEffects.getActiveEffects();
     }
 
     private void HandleShooting()
@@ -46,6 +56,10 @@ public class PistolBehavior : MonoBehaviour
         {
             EnemyHealth enemyHealth = aimHitDirection.collider.GetComponent<EnemyHealth>();
             enemyHealth.takeDamage(pistolDamage);
+            foreach (var effect in effects)
+            {
+                    effect.apply(aimHitDirection.collider.gameObject);
+            }
             Debug.DrawRay(Camera.position, Camera.forward, Color.red);
             Instantiate(EnemyImpact, aimHitDirection.point, Quaternion.LookRotation(aimHitDirection.normal));
 
