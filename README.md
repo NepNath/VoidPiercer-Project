@@ -36,7 +36,13 @@ the game takes place in a close future, as the player control "Void Piercer", a 
 
 - combat system 
     - 1 ranged weapon (Energy revolver)
-    - Melee system
+
+    - Login/Register system with API integration  
+        - Players can register and log in to the game through an API we made.  
+        The API is built with Node.js and Express, and uses Mariadb for data storage.  
+        The API : https://github.com/M1n-0/VoidPiercer_API
+
+
 
 
 ### What is currently being worked on ?
