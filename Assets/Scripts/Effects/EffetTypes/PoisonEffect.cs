@@ -4,9 +4,8 @@ using System.Collections;
 [CreateAssetMenu(menuName = "StatusEffects/PoisonEffect")]
 public class PoisonEffect : StatusEffect
 {
-    public int totalDamage = 20;
-    public float duration = 4f;
-    public string rarety = "Common";
+    public int totalDamage = 5;
+    public float duration = 5f;
 
     public override void apply(GameObject target)
     {
@@ -27,9 +26,5 @@ public class PoisonEffect : StatusEffect
             ennemy.takeDamage(damagePerTick);
             yield return new WaitForSeconds(tickInterval);
         }
-    }
-    public string getRarety()
-    {
-        return rarety;
     }
 }

@@ -1,11 +1,16 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
-public class EffectSpawner : MonoBehaviour
+public class EffectItemSpawner : MonoBehaviour
 {
     public GameObject effectItemPrefab;
     public List<RaritySpawnChance> rarityChances;
     public List<EffectByRarity> effectsByRarity;
+
+    void Start()
+    {
+        SpawnRandomEffect(new Vector3(-17, 3, 14));
+    }
 
     public void SpawnRandomEffect(Vector3 position)
     {
@@ -14,8 +19,8 @@ public class EffectSpawner : MonoBehaviour
 
         if (selectedEffect == null) return;
 
-        GameObject pickup = Instantiate(effectItemPrefab, position, Quaternion.identity);
-        pickup.GetComponent<EffectPickup>().effect = selectedEffect;
+        GameObject collectible = Instantiate(effectItemPrefab, position, Quaternion.identity);
+        collectible.GetComponent<EffectCollectibles>().effect = selectedEffect;
     }
 
     private Rarity GetRandomRarity()
